@@ -7,14 +7,21 @@ import { AuxFnsService } from 'src/app/services/aux-fns.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
+export class LoginPage implements OnInit{
 
   constructor(private authSvc: AuthService, private auxFns: AuxFnsService) { }
+
+  async ngOnInit() {
+    const accessToken = await this.authSvc.refreshGoogle();
+    if(accessToken) {      
+      this.auxFns.navigateTo('/home');
+    }
+  }
 
   async loginWithGoogle() {    
     const user = await this.authSvc.loginWithGoogle();
 
-    if(user) {
+    if(user) {      
       this.auxFns.navigateTo('/home');
     }
   }

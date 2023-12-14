@@ -14,6 +14,7 @@ GoogleAuth.initialize({
 })
 export class AuthService {
   userData: any;
+  accessToken: any;
 
   constructor(private alertController: AlertController) { }
 
@@ -25,19 +26,26 @@ export class AuthService {
     } catch (error) {
       logError = error;
     }
-    console.log(googleUser);
-
-    const alert = await this.alertController.create({
-      header: 'Login',
-      message: 'Usuario: ' + googleUser + '. Error: ' + logError,
-      buttons: ['Aceptar']
-    });
-  
-    await alert.present();
-
-    console.log(googleUser);
     this.userData = googleUser;
+    localStorage.setItem('userData', JSON.stringify(this.userData));
     return googleUser;
+  }
+
+  userIsLoggedIn() {
+    this.userData = JSON.parse(localStorage.getItem('userData') || '');
+    return this.userData.authentication.accessToken;;
+  }
+
+  async refreshGoogle() {
+    const userAuthCode = await GoogleAuth.refresh();
+    this.accessToken = userAuthCode;
+    return userAuthCode;
+  }
+
+  async signOutGoogle() {
+    await GoogleAuth.signOut();
+    this.userData = null;
+    localStorage.setItem('userData', '');
   }
 
   getUserName() {
