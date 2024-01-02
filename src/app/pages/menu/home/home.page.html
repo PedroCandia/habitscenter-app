@@ -7,7 +7,7 @@
       <ion-title style="padding: 0.5rem;">{{authSvc.getUserName() || 'UserName'}}</ion-title>
     </div>
 
-    <ion-text slot="end" style="padding-right: .3rem;">1</ion-text>
+    <ion-text slot="end" style="padding-right: .3rem;">{{currentRubys}}</ion-text>
     <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px;" />
     <ion-icon slot="end" name="log-in-outline" (click)="signOutGoogle()" style="width: 35px; height: 35px; padding: 0 0.5rem;" color="danger"></ion-icon>
   </ion-toolbar>
