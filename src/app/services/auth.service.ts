@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import '@codetrix-studio/capacitor-google-auth';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import { AlertController } from '@ionic/angular';
+import { SupabaseService } from './supabase.service';
 
 GoogleAuth.initialize({
   clientId: '',
@@ -15,19 +15,23 @@ GoogleAuth.initialize({
 export class AuthService {
   userData: any;
   accessToken: any;
+  supabaseSvc = inject(SupabaseService);
 
-  constructor(private alertController: AlertController) { }
+  constructor() { }
 
   async loginWithGoogle() {
-    let googleUser, logError;
+    let googleUser;
 
     try {
       googleUser = await GoogleAuth.signIn();
+      this.userData = googleUser;
+      localStorage.setItem('userData', JSON.stringify(this.userData));
     } catch (error) {
-      logError = error;
-    }
-    this.userData = googleUser;
-    localStorage.setItem('userData', JSON.stringify(this.userData));
+      console.log('ERROR GOOGLE AUTH: ', error);
+    }    
+
+    await this.supabaseSvc.createUser(this.userData);
+    
     return googleUser;
   }
 
@@ -45,7 +49,7 @@ export class AuthService {
   async signOutGoogle() {
     await GoogleAuth.signOut();
     this.userData = null;
-    localStorage.setItem('userData', '');
+    localStorage.removeItem('userData');
   }
 
   getUserName() {

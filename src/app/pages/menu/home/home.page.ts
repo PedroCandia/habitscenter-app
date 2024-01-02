@@ -1,13 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuxFnsService } from 'src/app/services/aux-fns.service';
+import { SupabaseService } from 'src/app/services/supabase.service';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  public authSvc = inject(AuthService);
+  private auxFns = inject(AuxFnsService);
+  private supabaseSvc = inject(SupabaseService);
+
+  currentRubys:any;
   categories: any = [
     { 
       name: 'Salud Mental',
@@ -43,7 +50,11 @@ export class HomePage {
     },
   ];
 
-  constructor(public authSvc: AuthService, private auxFns: AuxFnsService) { }
+  constructor() { }
+
+  async ngOnInit() {
+    this.currentRubys = await this.supabaseSvc.getRubys();
+  }
 
   //authSvc.getUserEmail()
 
