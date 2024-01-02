@@ -1,10 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <div style="display: flex; justify-content: star; align-items: center;">
-      <ion-avatar style="width: 50px; height: 50px; margin-left: 0.3rem;">
-        <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl()}}" />
+      <ion-avatar style="width: 35px; height: 35px; margin-left: 0.5rem;">
+        <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl() || '../../../../assets/img/home/salud_mental/primer_robot_azul.png'}}" />
       </ion-avatar>
-      <ion-title>{{authSvc.getUserName()}}</ion-title>
+      <ion-title style="padding: 0.5rem;">{{authSvc.getUserName() || 'UserName'}}</ion-title>
     </div>
 
     <ion-text slot="end" style="padding-right: .3rem;">1</ion-text>
@@ -14,5 +14,18 @@
 </ion-header>
 
 <ion-content>
-  <!-- <ion-text>{{authSvc.getUserEmail()}}</ion-text> -->
+  <ion-grid>
+    <ion-row>
+      @for(categoryData of categories; track $index) {
+        <ion-col size="6">
+          <ion-card style="cursor: pointer;">
+            <ion-img src="{{categoryData.url}}" alt="{{categoryData.name}}"></ion-img>
+            <ion-card-content>
+              <ion-card-title>{{categoryData.name}}</ion-card-title>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
 </ion-content>

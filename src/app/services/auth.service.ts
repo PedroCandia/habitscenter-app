@@ -49,14 +49,14 @@ export class AuthService {
   }
 
   getUserName() {
-    return this.userData.displayName || '';
+    return this.userData?.displayName || '';
   }
 
   getUserEmail() {
-    return this.userData.email || '';
+    return this.userData?.email || '';
   }
 
   getUserImageUrl() {
-    return this.userData.imageUrl || '';
+    return this.userData?.imageUrl || '';
   }
 }
