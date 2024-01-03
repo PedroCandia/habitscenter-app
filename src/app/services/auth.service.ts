@@ -2,9 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import '@codetrix-studio/capacitor-google-auth';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { SupabaseService } from './supabase.service';
+import { environment } from 'src/environments/environment';
 
 GoogleAuth.initialize({
-  clientId: '',
+  clientId: environment.google.android_client,
   scopes: ['profile', 'email'],
   grantOfflineAccess: false,
 });
