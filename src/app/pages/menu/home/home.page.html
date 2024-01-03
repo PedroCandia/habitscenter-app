@@ -1,31 +1,44 @@
 <ion-header>
   <ion-toolbar>
     <div style="display: flex; justify-content: star; align-items: center;">
-      <ion-avatar style="width: 35px; height: 35px; margin-left: 0.5rem;">
-        <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl() || '../../../../assets/img/home/salud_mental/primer_robot_azul.png'}}" />
-      </ion-avatar>
-      <ion-title style="padding: 0.5rem;">{{authSvc.getUserName() || 'UserName'}}</ion-title>
+      @if(!onChat) {
+        <ion-avatar style="width: 35px; height: 35px; margin-left: 0.5rem;">
+          <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl() || '../../../../assets/img/home/salud_mental/primer_robot_azul.png'}}" />
+        </ion-avatar>
+        <ion-title style="padding: 0.5rem;">{{authSvc.getUserName() || 'UserName'}}</ion-title>
+      } @else {
+        <ion-icon name="arrow-back-outline" style="width: 35px; height: 35px; margin-left: 0.5rem; cursor: pointer;" (click)="closeChat()"></ion-icon>
+        <ion-button color="warning" style="margin-left: 0.5rem;">Obtener mas Rubys</ion-button>
+      }
     </div>
 
     <ion-text slot="end" style="padding-right: .3rem;">{{currentRubys}}</ion-text>
-    <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px;" />
-    <ion-icon slot="end" name="log-in-outline" (click)="signOutGoogle()" style="width: 35px; height: 35px; padding: 0 0.5rem;" color="danger"></ion-icon>
+    @if(!onChat) {
+      <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px;" />
+      <ion-icon slot="end" name="log-in-outline" (click)="signOutGoogle()" style="width: 35px; height: 35px; padding: 0 0.5rem;" color="danger"></ion-icon>
+    } @else {
+      <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px; margin-right: 0.5rem;" />
+    }
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      @for(categoryData of categories; track $index) {
-        <ion-col size="6">
-          <ion-card style="cursor: pointer;">
-            <ion-img src="{{categoryData.url}}" alt="{{categoryData.name}}"></ion-img>
-            <ion-card-content>
-              <ion-card-title>{{categoryData.name}}</ion-card-title>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      }
-    </ion-row>
-  </ion-grid>
+  @if(!onChat) {
+    <ion-grid>
+      <ion-row>
+        @for(categoryData of categories; track $index) {
+          <ion-col size="6">
+            <ion-card style="cursor: pointer;" (click)="goToChat(categoryData)">
+              <ion-img src="{{categoryData.url}}" alt="{{categoryData.name}}"></ion-img>
+              <ion-card-content>
+                <ion-card-title>{{categoryData.name}}</ion-card-title>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+  } @else {
+    <app-chat-ai [currentCategoryData]='currentCategoryData' (removeOneRuby)="removeOneRuby($event)"></app-chat-ai>
+  }
 </ion-content>

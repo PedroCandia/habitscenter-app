@@ -38,6 +38,8 @@ export class AuthService {
 
   userIsLoggedIn() {
     this.userData = JSON.parse(localStorage.getItem('userData') || '');
+    // console.log('Guard: ', this.userData);
+    
     return this.userData.authentication.accessToken;;
   }
 
@@ -50,7 +52,7 @@ export class AuthService {
   async signOutGoogle() {
     await GoogleAuth.signOut();
     this.userData = null;
-    localStorage.removeItem('userData');
+    localStorage.clear();
   }
 
   getUserName() {
