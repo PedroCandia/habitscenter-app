@@ -14,7 +14,9 @@ export class HomePage implements OnInit {
   private auxFns = inject(AuxFnsService);
   private supabaseSvc = inject(SupabaseService);
 
+  onChat:boolean = false;
   currentRubys:any;
+  currentCategoryData:any;
   categories: any = [
     { 
       name: 'Salud Mental',
@@ -57,6 +59,20 @@ export class HomePage implements OnInit {
   }
 
   //authSvc.getUserEmail()
+
+  goToChat(categoryData:any) {
+    this.onChat = true;
+    this.currentCategoryData = categoryData;
+  }
+
+  closeChat() {
+    this.onChat = false;
+    this.currentCategoryData = null;
+  }
+
+  removeOneRuby(rubys:any) {
+    this.currentRubys = rubys;
+  }
 
   async signOutGoogle() {
     await this.authSvc.signOutGoogle();
