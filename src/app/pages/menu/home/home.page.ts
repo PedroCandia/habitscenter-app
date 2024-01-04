@@ -2,7 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuxFnsService } from 'src/app/services/aux-fns.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
-
+import { environment } from 'src/environments/environment';
+import { AdMob, RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem } from '@capacitor-community/admob';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +15,9 @@ export class HomePage implements OnInit {
   public authSvc = inject(AuthService);
   private auxFns = inject(AuxFnsService);
   private supabaseSvc = inject(SupabaseService);
+  private alertController = inject(AlertController);
 
+  onLoadAd = false;
   onChat:boolean = false;
   currentRubys:any;
   currentCategoryData:any;
@@ -65,9 +69,26 @@ export class HomePage implements OnInit {
     this.currentCategoryData = categoryData;
   }
 
-  closeChat() {
-    this.onChat = false;
-    this.currentCategoryData = null;
+  async closeChat() {
+    const alert = await this.alertController.create({
+      header: 'Regresar al menú',
+      message: '¿Estás seguro de que deseas regresar al menú? Ten en cuenta que los mensajes actuales serán borrados.',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Aceptar',
+          role: 'accept',
+          handler: async () => {
+            this.onChat = false;
+            this.currentCategoryData = null;
+          },
+        }
+      ],
+    });
+    await alert.present();
   }
 
   removeOneRuby(rubys:any) {
@@ -75,7 +96,54 @@ export class HomePage implements OnInit {
   }
 
   async signOutGoogle() {
-    await this.authSvc.signOutGoogle();
-    this.auxFns.navigateTo('/login');
+    const alert = await this.alertController.create({
+      header: 'Cerrar sesión',
+      message: '¿Estás seguro de que deseas cerrar la sesión?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Aceptar',
+          role: 'accept',
+          handler: async () => {
+            await this.authSvc.signOutGoogle();
+            this.auxFns.navigateTo('/login');
+          },
+        }
+      ],
+    });
+    await alert.present();
+  }
+
+  async showRewardVideo() {
+    this.onLoadAd = true;
+
+    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+      // Subscribe prepared rewardVideo
+    });
+
+    AdMob.addListener(RewardAdPluginEvents.Rewarded, async (rewardItem: AdMobRewardItem) => {
+      // Subscribe user rewarded
+      console.log(rewardItem);
+
+      this.currentRubys = await this.supabaseSvc.addOneRuby(this.currentRubys);
+      this.onLoadAd = false;
+    });
+
+    const userData = JSON.parse(localStorage.getItem('userData') || '');
+    const options: RewardAdOptions = {
+      adId: environment.google.addMob.app_id,
+      isTesting: true,
+      // npa: true
+      ssv: {
+        userId: userData.id
+        // customData: JSON.stringify({ ...MyCustomData })
+      }
+    };
+    await AdMob.prepareRewardVideoAd(options);
+    const rewardItem = await AdMob.showRewardVideoAd();
+    console.log('rewardItem: ', rewardItem);
   }
 }

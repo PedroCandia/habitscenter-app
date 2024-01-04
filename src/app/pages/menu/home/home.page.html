@@ -8,7 +8,7 @@
         <ion-title style="padding: 0.5rem;">{{authSvc.getUserName() || 'UserName'}}</ion-title>
       } @else {
         <ion-icon name="arrow-back-outline" style="width: 35px; height: 35px; margin-left: 0.5rem; cursor: pointer;" (click)="closeChat()"></ion-icon>
-        <ion-button color="warning" style="margin-left: 0.5rem;">Obtener mas Rubys</ion-button>
+        <ion-button color="warning" style="margin-left: 0.5rem;" (click)="showRewardVideo()" [disabled]="onLoadAd">Ganar Rubys</ion-button>
       }
     </div>
 

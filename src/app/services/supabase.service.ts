@@ -35,13 +35,26 @@ export class SupabaseService {
   async removeOneRuby(rubys:any) {
     if(rubys < 1) return rubys;
 
-    rubys = rubys - 1;
+    rubys = Number(rubys) - 1;
     this.userData = JSON.parse(localStorage.getItem('userData') || '');
     try {
       await this.supabase.from('users').update({ rubys: rubys }).eq('id', this.userData.id); 
     } catch (error) {
       console.log('Update rubys: ', error);
     }
+
+    return rubys;
+  }
+
+  async addOneRuby(rubys:any) {
+    rubys = Number(rubys) + 1;
+
+    this.userData = JSON.parse(localStorage.getItem('userData') || '');
+    try {
+      await this.supabase.from('users').update({ rubys: rubys }).eq('id', this.userData.id);
+    } catch (error) {
+      console.log('Update rubys: ', error);
+    };
 
     return rubys;
   }
