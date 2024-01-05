@@ -135,7 +135,7 @@ export class HomePage implements OnInit {
     const userData = JSON.parse(localStorage.getItem('userData') || '');
     const options: RewardAdOptions = {
       adId: environment.google.addMob.app_id,
-      isTesting: true,
+      isTesting: environment.google.addMob.isTesting,
       // npa: true
       ssv: {
         userId: userData.id
