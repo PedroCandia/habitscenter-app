@@ -7,7 +7,7 @@ import { AuxFnsService } from 'src/app/services/aux-fns.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit{
+export class LoginPage implements OnInit {
 
   constructor(private authSvc: AuthService, private auxFns: AuxFnsService) { }
 
