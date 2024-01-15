@@ -13,7 +13,7 @@ export class LoginPage implements OnInit{
 
   async ngOnInit() {
     const accessToken = await this.authSvc.refreshGoogle();
-    if(accessToken) {      
+    if(accessToken) {
       this.auxFns.navigateTo('/home');
     }
   }

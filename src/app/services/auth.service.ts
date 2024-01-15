@@ -27,20 +27,27 @@ export class AuthService {
       googleUser = await GoogleAuth.signIn();
       this.userData = googleUser;
       localStorage.setItem('userData', JSON.stringify(this.userData));
+      await this.supabaseSvc.createUser(this.userData);
     } catch (error) {
       console.log('ERROR GOOGLE AUTH: ', error);
-    }    
-
-    await this.supabaseSvc.createUser(this.userData);
+    }
     
     return googleUser;
   }
 
   userIsLoggedIn() {
-    this.userData = JSON.parse(localStorage.getItem('userData') || '');
-    // console.log('Guard: ', this.userData);
-    
-    return this.userData.authentication.accessToken;;
+    const userData = localStorage.getItem('userData');
+    if(userData) {
+      this.userData = JSON.parse(userData);
+    } else {
+      return false;
+    }
+
+    if(this.userData?.authentication) {
+      return this.userData.authentication.accessToken;
+    }
+
+    return false;
   }
 
   async refreshGoogle() {
