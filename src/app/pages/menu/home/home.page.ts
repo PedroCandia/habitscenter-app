@@ -59,7 +59,9 @@ export class HomePage implements OnInit {
   constructor() { }
 
   async ngOnInit() {
-    this.currentRubys = await this.supabaseSvc.getRubys();
+    if(environment.production) {
+      this.currentRubys = await this.supabaseSvc.getRubys();
+    }
   }
 
   //authSvc.getUserEmail()
