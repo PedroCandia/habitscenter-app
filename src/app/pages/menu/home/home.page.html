@@ -3,7 +3,7 @@
     <div style="display: flex; justify-content: star; align-items: center;">
       @if(!onChat) {
         <ion-avatar style="width: 35px; height: 35px; margin-left: 0.5rem;">
-          <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl() || '../../../../assets/img/home/salud_mental/primer_robot_azul.png'}}" />
+          <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl()}}" />
         </ion-avatar>
         <ion-title style="padding: 0.5rem;">{{authSvc.getUserName() || 'UserName'}}</ion-title>
       } @else {
@@ -24,16 +24,21 @@
 
 <ion-content>
   @if(!onChat) {
-    <ion-grid>
+    <ion-grid style="padding: 0;">
       <ion-row>
         @for(categoryData of categories; track $index) {
           <ion-col size="6">
-            <ion-card style="cursor: pointer;" (click)="goToChat(categoryData)">
-              <ion-img src="{{categoryData.url}}" alt="{{categoryData.name}}"></ion-img>
-              <ion-card-content style="text-align: center;">
+            <div class="card" (click)="goToChat(categoryData)">
+              <div class="card-image">
+                <img src="{{categoryData.url}}" alt="{{categoryData.name}}"/>
+              </div>
+              <div class="card_content">
+                <h2 class="card_title">{{categoryData.name}}</h2>
+              </div>
+              <!-- <ion-card-content style="text-align: center;">
                 <ion-card-title>{{categoryData.name}}</ion-card-title>
-              </ion-card-content>
-            </ion-card>
+              </ion-card-content> -->
+            </div>
           </ion-col>
         }
       </ion-row>

@@ -71,6 +71,6 @@ export class AuthService {
   }
 
   getUserImageUrl() {
-    return this.userData?.imageUrl || '';
+    return this.userData?.imageUrl || '../../../../assets/img/home/salud_mental/primer_robot_azul.png';
   }
 }
