@@ -3,14 +3,14 @@
     font-family: 'Tektur', sans-serif;
 }
 
-ion-content {
-    --offset-bottom: auto!important;
-    --overflow: hidden;
-    overflow: auto;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-}
+// ion-content {
+//     --offset-bottom: auto!important;
+//     --overflow: hidden;
+//     overflow: auto;
+//     &::-webkit-scrollbar {
+//       display: none;
+//     }
+// }
 
 h2 {
     color: white;
