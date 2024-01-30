@@ -3,8 +3,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AuxFnsService } from 'src/app/services/aux-fns.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { environment } from 'src/environments/environment';
-import { AdMob, RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem } from '@capacitor-community/admob';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
+import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
 
 @Component({
   selector: 'app-home',
@@ -16,11 +16,11 @@ export class HomePage implements OnInit {
   private auxFns = inject(AuxFnsService);
   private supabaseSvc = inject(SupabaseService);
   private alertController = inject(AlertController);
+  private modalController = inject(ModalController);
 
   onLoadAd = false;
-  onChat:boolean = false;
   currentRubys:any;
-  currentCategoryData:any;
+  // currentCategoryData:any;
   categories: any = [
     { 
       name: 'Salud Mental',
@@ -66,31 +66,51 @@ export class HomePage implements OnInit {
 
   //authSvc.getUserEmail()
 
-  goToChat(categoryData:any) {
-    this.onChat = true;
-    this.currentCategoryData = categoryData;
+  async goToChat(categoryData:any) {
+    // this.onChat = true;
+    // this.currentCategoryData = categoryData;
+
+    const modal = await this.modalController.create({
+      component: ChatAiComponent,
+      // cssClass: 'modal-select-quantity-product',
+      componentProps: {
+        // Aquí puedes pasar propiedades o datos adicionales al modal si es necesario
+        // Ejemplo: data: { prop1: valor1, prop2: valor2 }
+        currentCategoryData: categoryData,
+        currentRubys: this.currentRubys
+      }
+    });
+
+    modal.onDidDismiss()
+      .then((data) => {
+        this.currentRubys = data['data'];
+    });
+  
+    await modal.present();
   }
 
   async closeChat() {
-    const alert = await this.alertController.create({
-      header: 'Regresar al menú',
-      message: '¿Estás seguro de que deseas regresar al menú? Ten en cuenta que los mensajes actuales serán borrados.',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Aceptar',
-          role: 'accept',
-          handler: async () => {
-            this.onChat = false;
-            this.currentCategoryData = null;
-          },
-        }
-      ],
-    });
-    await alert.present();
+    // this.onChat = false;
+    // this.currentCategoryData = null;
+    // const alert = await this.alertController.create({
+    //   header: 'Regresar al menú',
+    //   message: '¿Estás seguro de que deseas regresar al menú? Ten en cuenta que los mensajes actuales serán borrados.',
+    //   buttons: [
+    //     {
+    //       text: 'Cancelar',
+    //       role: 'cancel',
+    //     },
+    //     {
+    //       text: 'Aceptar',
+    //       role: 'accept',
+    //       handler: async () => {
+    //         this.onChat = false;
+    //         this.currentCategoryData = null;
+    //       },
+    //     }
+    //   ],
+    // });
+    // await alert.present();
   }
 
   removeOneRuby(rubys:any) {
@@ -117,35 +137,5 @@ export class HomePage implements OnInit {
       ],
     });
     await alert.present();
-  }
-
-  async showRewardVideo() {
-    this.onLoadAd = true;
-
-    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-      // Subscribe prepared rewardVideo
-    });
-
-    AdMob.addListener(RewardAdPluginEvents.Rewarded, async (rewardItem: AdMobRewardItem) => {
-      // Subscribe user rewarded
-      console.log(rewardItem);
-
-      this.currentRubys = await this.supabaseSvc.addOneRuby(this.currentRubys);
-      this.onLoadAd = false;
-    });
-
-    const userData = JSON.parse(localStorage.getItem('userData') || '');
-    const options: RewardAdOptions = {
-      adId: environment.google.addMob.app_id,
-      isTesting: environment.google.addMob.isTesting,
-      // npa: true
-      ssv: {
-        userId: userData.id
-        // customData: JSON.stringify({ ...MyCustomData })
-      }
-    };
-    await AdMob.prepareRewardVideoAd(options);
-    const rewardItem = await AdMob.showRewardVideoAd();
-    console.log('rewardItem: ', rewardItem);
   }
 }

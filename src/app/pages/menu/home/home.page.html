@@ -1,49 +1,28 @@
 <ion-header>
   <ion-toolbar>
     <div style="display: flex; justify-content: star; align-items: center;">
-      @if(!onChat) {
         <ion-avatar style="width: 35px; height: 35px; margin-left: 0.5rem;">
           <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl()}}" />
         </ion-avatar>
         <ion-title style="padding: 0.5rem;">{{authSvc.getUserName() || 'UserName'}}</ion-title>
-      } @else {
-        <ion-icon name="arrow-back-outline" style="width: 35px; height: 35px; margin-left: 0.5rem; cursor: pointer;" (click)="closeChat()"></ion-icon>
-        <ion-button color="warning" style="margin-left: 0.5rem;" (click)="showRewardVideo()" [disabled]="onLoadAd">Ganar Rubys</ion-button>
-      }
     </div>
 
     <ion-text slot="end" style="padding-right: .3rem;">{{currentRubys}}</ion-text>
-    @if(!onChat) {
-      <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px;" />
-      <ion-icon slot="end" name="log-in-outline" (click)="signOutGoogle()" style="width: 35px; height: 35px; padding: 0 0.5rem;" color="danger"></ion-icon>
-    } @else {
-      <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px; margin-right: 0.5rem;" />
-    }
+    <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px;" />
+    <ion-icon slot="end" name="log-in-outline" (click)="signOutGoogle()" style="width: 35px; height: 35px; padding: 0 0.5rem;" color="danger"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  @if(!onChat) {
-    <ion-grid style="padding: 0;">
-      <ion-row>
-        @for(categoryData of categories; track $index) {
-          <ion-col size="6">
-            <div class="card" (click)="goToChat(categoryData)">
-              <div class="card-image">
-                <img src="{{categoryData.url}}" alt="{{categoryData.name}}"/>
-              </div>
-              <div class="card_content">
-                <h2 class="card_title">{{categoryData.name}}</h2>
-              </div>
-              <!-- <ion-card-content style="text-align: center;">
-                <ion-card-title>{{categoryData.name}}</ion-card-title>
-              </ion-card-content> -->
-            </div>
-          </ion-col>
-        }
-      </ion-row>
-    </ion-grid>
-  } @else {
-    <app-chat-ai [currentCategoryData]='currentCategoryData' (removeOneRuby)="removeOneRuby($event)"></app-chat-ai>
-  }
+  <ion-list>
+    @for(categoryData of categories; track $index) {
+      <ion-item (click)="goToChat(categoryData)">
+        <ion-avatar>
+          <img alt="{{categoryData.name}}" src="{{categoryData.url}}" />
+        </ion-avatar>
+        <ion-text>{{categoryData.name}}</ion-text>
+      </ion-item>
+    }
+  </ion-list>
+  <!-- <app-chat-ai [currentCategoryData]='currentCategoryData' (removeOneRuby)="removeOneRuby($event)"></app-chat-ai> -->
 </ion-content>
