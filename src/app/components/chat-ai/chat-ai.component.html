@@ -1,22 +1,39 @@
-<ion-grid style="width: 85%; height: 80%; overflow-y: auto; padding: 1rem 0rem;">
-  <ion-content #content>
-    <ion-row *ngFor="let message of messages">
-      <ion-col [ngClass]="message.sender === 'chat-user-message' ? 'chat-user-message' : 'chat-ai-message'">
-        <div>
-          <ion-text> {{ message.sender === 'chat-user-message' ? 'Yo: ' : 'Tory: ' }} {{ message.text }} </ion-text>
+<ion-header>
+  <ion-toolbar>
+    <div style="display: flex; justify-content: start; align-items: center;" slot="start">
+      <ion-icon name="arrow-back-outline" style="width: 35px; height: 35px; margin-left: 0.5rem; cursor: pointer;" (click)="closeChat()"></ion-icon>
+    </div>
+    <ion-title>{{this.currentCategoryData.name}}</ion-title>
+    <ion-text slot="end" style="padding-right: .3rem;">{{currentRubys}}</ion-text>
+    <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px; margin-right: 0.5rem;" />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="width: 100%; height: 8%; display: flex; justify-content: end; align-items: center; padding-right: 0.5rem;">
+    <ion-button color="warning" (click)="showRewardVideo()" [disabled]="onLoadAd">Ganar Rubys</ion-button>
+  </div>
+
+  <ion-grid style="width: 100%; height: 82%; overflow-y: auto; padding: 0.5rem 0.5rem;">
+    <ion-content #content>
+      <ion-row *ngFor="let message of messages">
+        <ion-col [ngClass]="message.sender === 'user' ? 'user-col' : 'assistant-col'">
+          <div>
+            <ion-text>{{ message.text }} </ion-text>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-content>
+  </ion-grid>
+  
+  <ion-grid style="width: 100%; height: 10%;">
+    <ion-row style="width: 100%; height: 100%;">
+      <ion-col style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+        <div style="display: flex; align-items: center; width: 85%;">
+          <ion-input #writeMessageInput id="writeMessageInput" (keyup.enter)="sendMessage()" [(ngModel)]="newMessage" placeholder="Escribe un mensaje"></ion-input>
+          <ion-icon style="font-size: 1.5rem; cursor: pointer; padding-left: 1rem;" name="send-outline" (click)="sendMessage()" id="sendMessageIcon"></ion-icon>
         </div>
       </ion-col>
     </ion-row>
-  </ion-content>
-</ion-grid>
-
-<ion-grid style="width: 100%; height: 20%;">
-  <ion-row style="width: 100%; height: 100%;">
-    <ion-col style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
-      <div style="display: flex; align-items: center; width: 85%;">
-        <ion-input #writeMessageInput id="writeMessageInput" (keyup.enter)="sendMessage()" [(ngModel)]="newMessage" placeholder="Escribe un mensaje"></ion-input>
-        <ion-icon style="font-size: 1.5rem; cursor: pointer; padding-left: 1rem;" name="send-outline" (click)="sendMessage()" id="sendMessageIcon"></ion-icon>
-      </div>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+  </ion-grid>
+</ion-content>

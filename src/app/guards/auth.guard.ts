@@ -15,12 +15,6 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     const accessToken = this.authSvc.userIsLoggedIn();
-    if(accessToken) {
-      console.log('AccessToken: ', accessToken);
-      
-      // this.auxFns.navigateTo('/home');
-      return true;
-    }
-    return false;
+    return accessToken ? true : false;
   }
 }

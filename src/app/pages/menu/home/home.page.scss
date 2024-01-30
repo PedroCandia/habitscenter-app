@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Tektur', sans-serif;
+}
+
+ion-avatar {
+    width: 50px;
+    height: 50px;
+}
+
+ion-text {
+    font-size: 1.2rem;
+    padding-left: 0.5rem;
+}
+
+ion-list {
+    background: transparent;
+}
+
+ion-item {
+    --background: transparent;
+}

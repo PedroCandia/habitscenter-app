@@ -1,13 +1,20 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>HabitsCenter AI</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <div style="display: flex; width: 100%; height: 100%; justify-content: center; align-items: center;">
-    <ion-button (click)="loginWithGoogle()">
-      Iniciar sesión
-    </ion-button>
+  <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100%; width: 100%;">
+    <div style="height: 70%; width: 100%;">
+      <div class="title">
+        <ion-title>HabitsCenter AI</ion-title>
+      </div>
+  
+      <div class="logo">
+        <ion-img src="../../../../assets/img/login/icon.png" style="width: 300px; height: 300px;"></ion-img>
+      </div>
+    </div>
+  
+    <div class="singInContent">
+      <ion-button color="light" (click)="loginWithGoogle()">
+        <ion-icon name="logo-google"></ion-icon>
+        Google
+      </ion-button>
+    </div>
   </div>
 </ion-content>

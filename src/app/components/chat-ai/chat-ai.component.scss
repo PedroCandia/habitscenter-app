@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Tektur', sans-serif;
+}
+
+.user-col {
+    background-color: #8A2BE2;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+}
+
+.assistant-col {
+    background-color: #87CEEB;
+    color: black;
+    padding: 0.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+}
+
+ion-title {
+    text-align: center;
+}

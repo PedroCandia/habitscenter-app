@@ -2,7 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuxFnsService } from 'src/app/services/aux-fns.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
-
+import { environment } from 'src/environments/environment';
+import { AlertController, ModalController } from '@ionic/angular';
+import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
 
 @Component({
   selector: 'app-home',
@@ -13,10 +15,12 @@ export class HomePage implements OnInit {
   public authSvc = inject(AuthService);
   private auxFns = inject(AuxFnsService);
   private supabaseSvc = inject(SupabaseService);
+  private alertController = inject(AlertController);
+  private modalController = inject(ModalController);
 
-  onChat:boolean = false;
+  onLoadAd = false;
   currentRubys:any;
-  currentCategoryData:any;
+  // currentCategoryData:any;
   categories: any = [
     { 
       name: 'Salud Mental',
@@ -55,19 +59,58 @@ export class HomePage implements OnInit {
   constructor() { }
 
   async ngOnInit() {
-    this.currentRubys = await this.supabaseSvc.getRubys();
+    if(environment.production) {
+      this.currentRubys = await this.supabaseSvc.getRubys();
+    }
   }
 
   //authSvc.getUserEmail()
 
-  goToChat(categoryData:any) {
-    this.onChat = true;
-    this.currentCategoryData = categoryData;
+  async goToChat(categoryData:any) {
+    // this.onChat = true;
+    // this.currentCategoryData = categoryData;
+
+    const modal = await this.modalController.create({
+      component: ChatAiComponent,
+      // cssClass: 'modal-select-quantity-product',
+      componentProps: {
+        // Aquí puedes pasar propiedades o datos adicionales al modal si es necesario
+        // Ejemplo: data: { prop1: valor1, prop2: valor2 }
+        currentCategoryData: categoryData,
+        currentRubys: this.currentRubys
+      }
+    });
+
+    modal.onDidDismiss()
+      .then((data) => {
+        this.currentRubys = data['data'];
+    });
+  
+    await modal.present();
   }
 
-  closeChat() {
-    this.onChat = false;
-    this.currentCategoryData = null;
+  async closeChat() {
+    // this.onChat = false;
+    // this.currentCategoryData = null;
+    // const alert = await this.alertController.create({
+    //   header: 'Regresar al menú',
+    //   message: '¿Estás seguro de que deseas regresar al menú? Ten en cuenta que los mensajes actuales serán borrados.',
+    //   buttons: [
+    //     {
+    //       text: 'Cancelar',
+    //       role: 'cancel',
+    //     },
+    //     {
+    //       text: 'Aceptar',
+    //       role: 'accept',
+    //       handler: async () => {
+    //         this.onChat = false;
+    //         this.currentCategoryData = null;
+    //       },
+    //     }
+    //   ],
+    // });
+    // await alert.present();
   }
 
   removeOneRuby(rubys:any) {
@@ -75,7 +118,24 @@ export class HomePage implements OnInit {
   }
 
   async signOutGoogle() {
-    await this.authSvc.signOutGoogle();
-    this.auxFns.navigateTo('/login');
+    const alert = await this.alertController.create({
+      header: 'Cerrar sesión',
+      message: '¿Estás seguro de que deseas cerrar la sesión?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Aceptar',
+          role: 'accept',
+          handler: async () => {
+            await this.authSvc.signOutGoogle();
+            this.auxFns.navigateTo('/login');
+          },
+        }
+      ],
+    });
+    await alert.present();
   }
 }
