@@ -5,6 +5,7 @@ import { ChatgptService } from 'src/app/services/chatgpt.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { AdMob, RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem } from '@capacitor-community/admob';
 import { environment } from 'src/environments/environment';
+import { MsgHistoryService } from 'src/app/services/msg-history.service';
 
 @Component({
   selector: 'app-chat-ai',
@@ -24,27 +25,33 @@ export class ChatAiComponent {
   private alertController = inject(AlertController);
   private authSvc = inject(AuthService);
   private loadingCtllr = inject(LoadingController);
+  private msgHistorySvc = inject(MsgHistoryService);
 
   onLoadAd = false;
   userId: string = '';
-  messages: any[] = []; // Aquí defines una propiedad "messages" que será un arreglo para almacenar los mensajes.
-  newMessage: string = ''; // Aquí defines una propiedad "newMessage" para almacenar el nuevo mensaje que el usuario escribirá.
+  messages: any[] = [];
+  newMessage: string = '';
 
   constructor() { }
 
-  async ionViewWillEnter() {    
-    const loading = await this.loadingCtllr.create();
-    await loading.present();
-
-    await this.getAllMessages();
-
+  async ionViewWillEnter() {
+    this.messages = this.msgHistorySvc.getAllMessages(this.currentCategoryData.name);
     if(this.messages.length === 0) {
-      let greetingMessage = 'Bienvenido a HabitsCenter. Soy especialista en ' + this.currentCategoryData.name + '.';
-      greetingMessage += ' ¿En qué puedo asistirle hoy?';
-      this.messages.push({ sender: 'assistant', text: greetingMessage });
-    }
+      const loading = await this.loadingCtllr.create();
+      await loading.present();
 
-    await loading.dismiss();
+      await this.getAllMessages();
+
+      if(this.messages.length === 0) {
+        let greetingMessage = 'Bienvenido a HabitsCenter. Soy especialista en ' + this.currentCategoryData.name + '.';
+        greetingMessage += ' ¿En qué puedo asistirle hoy?';
+        this.messages.push({ sender: 'assistant', text: greetingMessage });
+      }
+
+      await loading.dismiss();
+
+      this.msgHistorySvc.setMessages(this.currentCategoryData.name, this.messages);
+    }
 
     setTimeout(() => {
       this.content.scrollToBottom(0);
@@ -55,11 +62,8 @@ export class ChatAiComponent {
     this.userId = this.authSvc.getUserID();
     let allMessages = await this.chatgptSvc.getAllMessages(this.userId, this.currentCategoryData.name);
     allMessages = allMessages.reverse();
-    console.log('AllMessages: ', allMessages);
     
     allMessages.map((body: any, index:any) => {
-      console.log(index + ' ', body);
-      
       this.messages.push({ sender: body.role === 'user' ? 'user': 'assistant', text: body.content[0]?.text?.value });
     });
   }
@@ -83,9 +87,10 @@ export class ChatAiComponent {
           this.content.scrollToBottom(0);
         }, 0);
 
-        await this.getMessageChatGPT(msg);
         rubys = await this.supabaseSvc.removeOneRuby(rubys);
         this.currentRubys -= 1;
+        await this.getMessageChatGPT(msg);
+        this.msgHistorySvc.setMessages(this.currentCategoryData.name, this.messages);
       } else {
         this.showAlert('La longitud del mensaje excede el límite permitido de 256 caracteres. La longitud actual es ' + this.newMessage.length);
       }
@@ -101,6 +106,9 @@ export class ChatAiComponent {
   }
 
   async getMessageChatGPT(msg: any) {
+    if(!this.userId) {
+      this.userId = this.authSvc.getUserID();
+    }
     const resChatGPT = await this.chatgptSvc.chatgpt(msg, this.currentCategoryData.name, this.userId);
     this.messages.push({ sender: 'assistant', text: resChatGPT });
     // this.messages.push({ sender: 'assistant', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' });
@@ -135,32 +143,30 @@ export class ChatAiComponent {
 
     this.onLoadAd = true;
 
-    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+    AdMob.addListener(RewardAdPluginEvents.Loaded, async (info: AdLoadInfo) => {
       // Subscribe prepared rewardVideo
+      await loading.dismiss();
     });
 
     AdMob.addListener(RewardAdPluginEvents.Rewarded, async (rewardItem: AdMobRewardItem) => {
       // Subscribe user rewarded
-      console.log(rewardItem);
-
-      this.currentRubys = await this.supabaseSvc.addOneRuby(this.currentRubys);
+      this.currentRubys = await this.supabaseSvc.addOneRuby();
       this.onLoadAd = false;
     });
 
-    const userData = JSON.parse(localStorage.getItem('userData') || '');
+    if(!this.userId) {
+      this.userId = this.authSvc.getUserID();
+    }
     const options: RewardAdOptions = {
       adId: environment.google.addMob.app_id,
       isTesting: environment.google.addMob.isTesting,
       // npa: true
       ssv: {
-        userId: userData.id
+        userId: this.userId
         // customData: JSON.stringify({ ...MyCustomData })
       }
     };
     await AdMob.prepareRewardVideoAd(options);
     const rewardItem = await AdMob.showRewardVideoAd();
-    console.log('rewardItem: ', rewardItem);
-
-    await loading.dismiss();
   }
 }
