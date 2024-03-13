@@ -3,9 +3,13 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatgptService } from 'src/app/services/chatgpt.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
-import { AdMob, RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem } from '@capacitor-community/admob';
+import { AdmobService } from 'src/app/services/admob.service';
 import { environment } from 'src/environments/environment';
 import { MsgHistoryService } from 'src/app/services/msg-history.service';
+// AdMob
+import { AdMob } from '@capacitor-community/admob';
+// AdMob Rewards
+import { RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem } from '@capacitor-community/admob';
 
 @Component({
   selector: 'app-chat-ai',
@@ -26,13 +30,14 @@ export class ChatAiComponent {
   private authSvc = inject(AuthService);
   private loadingCtllr = inject(LoadingController);
   private msgHistorySvc = inject(MsgHistoryService);
+  public adMobSvc = inject(AdmobService);
 
   onLoadAd = false;
   userId: string = '';
   messages: any[] = [];
   newMessage: string = '';
 
-  constructor() { }
+  constructor() {}
 
   async ionViewWillEnter() {
     this.messages = this.msgHistorySvc.getAllMessages(this.currentCategoryData.name);
@@ -141,8 +146,6 @@ export class ChatAiComponent {
     const loading = await this.loadingCtllr.create();
     await loading.present();
 
-    this.onLoadAd = true;
-
     AdMob.addListener(RewardAdPluginEvents.Loaded, async (info: AdLoadInfo) => {
       // Subscribe prepared rewardVideo
       await loading.dismiss();
@@ -150,8 +153,12 @@ export class ChatAiComponent {
 
     AdMob.addListener(RewardAdPluginEvents.Rewarded, async (rewardItem: AdMobRewardItem) => {
       // Subscribe user rewarded
+      const loading = await this.loadingCtllr.create();
+      await loading.present();
+
       this.currentRubys = await this.supabaseSvc.addOneRuby();
-      this.onLoadAd = false;
+
+      await loading.dismiss();
     });
 
     if(!this.userId) {

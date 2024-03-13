@@ -15,11 +15,10 @@ export class SupabaseService {
   }
 
   async createUser(userData:any) {
-    let accExists = false, res;
-
+    let accExists = false;
+    
     const { data, error } = await this.supabase.from('users').select().eq('id', userData.id);
     if(data && data[0] && data[0].id) {
-      console.log('Data acc already exits', data);
       accExists = true;
     }
 
@@ -33,7 +32,8 @@ export class SupabaseService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id: userData.id
+        id: userData.id,
+        email: userData.email
       })
     };
 
