@@ -29,8 +29,6 @@ export class ChatgptService {
         throw new Error('Network response was not ok');
       }
       data = await res.json();
-  
-      console.log('Get all messages: ', data);
     } catch (error) {
       console.log(error);
     }

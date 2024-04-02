@@ -5,6 +5,7 @@ import { SupabaseService } from 'src/app/services/supabase.service';
 import { environment } from 'src/environments/environment';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
+import { AdmobService } from 'src/app/services/admob.service';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,7 @@ export class HomePage implements OnInit {
   private supabaseSvc = inject(SupabaseService);
   private alertController = inject(AlertController);
   private modalController = inject(ModalController);
+  private adMobSvc = inject(AdmobService);
 
   onLoadAd = false;
   currentRubys:any;
@@ -62,6 +64,12 @@ export class HomePage implements OnInit {
     if(environment.production) {
       this.currentRubys = await this.supabaseSvc.getRubys();
     }
+
+    await this.banner();
+  }
+
+  async banner() {
+    await this.adMobSvc.banner();
   }
 
   //authSvc.getUserEmail()
