@@ -15,6 +15,7 @@ export class LoginPage implements OnInit {
     const accessToken = await this.authSvc.refreshGoogle();
     if(accessToken) {
       this.auxFns.navigateTo('/home');
+      this.authSvc.isLoggedIn = true;
     }
   }
 
@@ -23,6 +24,7 @@ export class LoginPage implements OnInit {
 
     if(user) {      
       this.auxFns.navigateTo('/home');
+      this.authSvc.isLoggedIn = true;
     }
   }
 }

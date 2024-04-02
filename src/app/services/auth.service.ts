@@ -3,6 +3,7 @@ import '@codetrix-studio/capacitor-google-auth';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { SupabaseService } from './supabase.service';
 import { environment } from 'src/environments/environment';
+import { AuxFnsService } from './aux-fns.service';
 
 GoogleAuth.initialize({
   clientId: environment.google.android_client,
@@ -14,11 +15,12 @@ GoogleAuth.initialize({
   providedIn: 'root'
 })
 export class AuthService {
+  isLoggedIn: boolean = false;
   userData: any;
   accessToken: any;
   supabaseSvc = inject(SupabaseService);
 
-  constructor() { }
+  constructor(private auxFns: AuxFnsService) { }
 
   async loginWithGoogle() {
     let googleUser;
@@ -26,6 +28,7 @@ export class AuthService {
     try {
       googleUser = await GoogleAuth.signIn();
       this.userData = googleUser;
+      this.userData.displayName = this.auxFns.filterNameTwoWords(this.userData.displayName);
       localStorage.setItem('userData', JSON.stringify(this.userData));
       await this.supabaseSvc.createUser(this.userData);
     } catch (error) {
@@ -59,6 +62,7 @@ export class AuthService {
   async signOutGoogle() {
     await GoogleAuth.signOut();
     this.userData = null;
+    this.isLoggedIn = false;
     localStorage.clear();
   }
 

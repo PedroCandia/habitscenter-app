@@ -19,7 +19,7 @@
       <ion-row *ngFor="let message of messages">
         <ion-col [ngClass]="message.sender === 'user' ? 'user-col' : 'assistant-col'">
           <div>
-            <ion-text>{{ message.text }} </ion-text>
+            <ion-text style="white-space: break-spaces;">{{ message.text }} </ion-text>
           </div>
         </ion-col>
       </ion-row>

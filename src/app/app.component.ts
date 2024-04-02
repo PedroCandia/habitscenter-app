@@ -13,10 +13,5 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     await this.adMobSvc.initialize();
-    await this.banner();
-  }
-
-  async banner() {
-    await this.adMobSvc.banner();
   }
 }
