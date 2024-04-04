@@ -26,35 +26,43 @@ export class HomePage implements OnInit {
   categories: any = [
     { 
       name: 'Salud Mental',
-      url: '../../../../assets/img/home/salud_mental/primer_robot_azul.png'
+      url: '../../../../assets/img/home/salud_mental/primer_robot_azul.png',
+      color: '#e5f8ff'
     },
     { 
       name: 'Desarrollo personal',
-      url: '../../../../assets/img/home/desarrollo_personal/primer_robot_verde.png'
+      url: '../../../../assets/img/home/desarrollo_personal/primer_robot_verde.png',
+      color: '#e5fff1'
     },
     { 
       name: 'Alimentación',
-      url: '../../../../assets/img/home/alimentacion/primer_robot_naranja.png'
+      url: '../../../../assets/img/home/alimentacion/primer_robot_naranja.png',
+      color: '#fff3e5'
     },
     { 
       name: 'Ejercicio',
-      url: '../../../../assets/img/home/ejercicio/primer_robot_rojo.png'
+      url: '../../../../assets/img/home/ejercicio/primer_robot_rojo.png',
+      color: '#ffe5e5'
     },
     { 
       name: 'Sueño',
-      url: '../../../../assets/img/home/sueño/primer_robot_morado.png'
+      url: '../../../../assets/img/home/sueño/primer_robot_morado.png',
+      color: '#f9e5ff'
     },
     { 
       name: 'Relaciones sociales',
-      url: '../../../../assets/img/home/relaciones_sociales/primer_robot_amarillo.png'
+      url: '../../../../assets/img/home/relaciones_sociales/primer_robot_amarillo.png',
+      color: '#fcffe5'
     },
     { 
       name: 'Gestión del tiempo',
-      url: '../../../../assets/img/home/gestion_tiempo/primer_robot_gris.png'
+      url: '../../../../assets/img/home/gestion_tiempo/primer_robot_gris.png',
+      color: '#ece9e9'
     },
     { 
       name: 'Gestión del estrés',
-      url: '../../../../assets/img/home/gestion_estres/primer_robot_rosa.png'
+      url: '../../../../assets/img/home/gestion_estres/primer_robot_rosa.png',
+      color: '#ffe5fc'
     },
   ];
 

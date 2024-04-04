@@ -1,22 +1,24 @@
-<ion-header>
-  <ion-toolbar>
-    <div style="display: flex; justify-content: star; align-items: center;">
-        <ion-avatar style="width: 35px; height: 35px; margin-left: 0.5rem;">
-          <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl()}}" />
-        </ion-avatar>
-        <ion-title style="padding: 0.5rem;">{{authSvc.getUserName() || 'UserName'}}</ion-title>
+<ion-content class="ion-padding" id="main-content">
+  <div style="display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center;">
+      <ion-avatar style="width: 35px; height: 35px; margin-left: 0.5rem;">
+        <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl()}}" />
+      </ion-avatar>
+      <ion-title>{{authSvc.getUserName() || 'UserName'}}</ion-title>
     </div>
 
-    <ion-text slot="end" style="padding-right: .3rem;">{{currentRubys}}</ion-text>
-    <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px;" />
-    <ion-icon slot="end" name="log-in-outline" (click)="signOutGoogle()" style="width: 35px; height: 35px; padding: 0 0.5rem;" color="danger"></ion-icon>
-  </ion-toolbar>
-</ion-header>
+    <div style="display: flex; align-items: center;">
+      <ion-text slot="end" style="padding-right: .3rem; color: var(--ion-color-dark);">{{currentRubys}}</ion-text>
+      <img slot="end" src="../../../../assets/img/home/ruby.png" style="width: 35px; height: 35px;" />
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    </div>
+  </div>
 
-<ion-content>
-  <ion-list>
+  <ion-list lines="none">
     @for(categoryData of categories; track $index) {
-      <ion-item (click)="goToChat(categoryData)">
+      <ion-item (click)="goToChat(categoryData)" [ngStyle]="{'--background': categoryData.color}">
         <ion-avatar>
           <img alt="{{categoryData.name}}" src="{{categoryData.url}}" />
         </ion-avatar>
@@ -26,3 +28,24 @@
   </ion-list>
   <!-- <app-chat-ai [currentCategoryData]='currentCategoryData' (removeOneRuby)="removeOneRuby($event)"></app-chat-ai> -->
 </ion-content>
+
+<ion-menu contentId="main-content" side="end">
+  <ion-header>
+    <ion-toolbar>
+      <div style="display: flex; align-items: center; margin-inline: 0.5rem;">
+        <ion-menu-toggle>
+          <ion-icon name="arrow-back-outline" style="font-size: 1.6rem;"></ion-icon>
+        </ion-menu-toggle>
+        <ion-title>Configuración</ion-title>
+      </div>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list lines="none" style="--background: transparent; ">
+      <ion-item style="--background: transparent" (click)="signOutGoogle()">
+        <ion-label>Cerrar sesión</ion-label>
+        <ion-icon slot="end" name="log-in-outline" style="width: 35px; height: 35px; padding: 0 0.5rem;" color="danger"></ion-icon>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>

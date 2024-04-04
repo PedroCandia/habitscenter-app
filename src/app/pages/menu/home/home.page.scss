@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    font-family: 'Tektur', sans-serif;
+    font-family: "Fira Sans", sans-serif;
 }
 
 ion-avatar {
@@ -8,15 +8,24 @@ ion-avatar {
     height: 50px;
 }
 
+ion-title {
+    padding: 0.5rem;
+    color: var(--ion-color-dark);
+}
+
 ion-text {
     font-size: 1.2rem;
     padding-left: 0.5rem;
+    color: var(--ion-color-always-dark);
 }
 
 ion-list {
     background: transparent;
+    padding: 0;
+    margin-top: 1rem;
 }
 
 ion-item {
-    --background: transparent;
+    border-radius: 19px;
+    margin-bottom: 0.6rem;
 }

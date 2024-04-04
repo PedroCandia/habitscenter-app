@@ -74,8 +74,9 @@ export class AuthService {
     return this.userData?.email || '';
   }
 
-  getUserImageUrl() {
-    return this.userData?.imageUrl || '../../../../assets/img/home/salud_mental/primer_robot_azul.png';
+  getUserImageUrl() {    
+    if(this.userData?.imageUrl === '' || this.userData?.imageUrl == null || this.userData?.imageUrl == undefined) return '../../../../assets/img/login/icon.png';
+    return this.userData?.imageUrl;
   }
 
   getUserID() {

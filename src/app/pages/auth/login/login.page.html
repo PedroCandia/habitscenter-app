@@ -1,19 +1,22 @@
 <ion-content>
   <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100%; width: 100%;">
-    <div style="height: 70%; width: 100%;">
-      <div class="title">
-        <ion-title>HabitsCenter AI</ion-title>
-      </div>
-  
       <div class="logo">
         <ion-img src="../../../../assets/img/login/icon.png" style="width: 300px; height: 300px;"></ion-img>
       </div>
-    </div>
+
+      <div class="eslogan">
+        <ion-text>
+          Los hábitos de hoy construyen el mañana.
+        </ion-text>
+      </div>
   
     <div class="singInContent">
-      <ion-button color="light" (click)="loginWithGoogle()">
+      <ion-button expand="full" shape="round" (click)="loginWithGoogle()">
         <ion-icon name="logo-google"></ion-icon>
-        Google
+        <div>
+          Continuar con Google
+        </div>
+        <div></div>
       </ion-button>
     </div>
   </div>
