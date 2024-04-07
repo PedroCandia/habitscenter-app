@@ -24,12 +24,8 @@ export class AdmobService {
   }
 
   async banner() {
-    const loading = await this.loadingCtllr.create();
-    await loading.present();
-    
     AdMob.addListener(BannerAdPluginEvents.Loaded, async () => {
       // Subscribe Banner Event Listener
-      await loading.dismiss();
     });
 
     AdMob.addListener(BannerAdPluginEvents.SizeChanged, (size: AdMobBannerSize) => {
@@ -54,5 +50,9 @@ export class AdmobService {
       // npa: true
     };
     AdMob.showBanner(options);
+  }
+
+  removeBanner() {
+    AdMob.removeBanner();
   }
 }

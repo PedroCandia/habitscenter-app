@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatgptService } from 'src/app/services/chatgpt.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
@@ -31,6 +31,7 @@ export class ChatAiComponent {
   private loadingCtllr = inject(LoadingController);
   private msgHistorySvc = inject(MsgHistoryService);
   public adMobSvc = inject(AdmobService);
+  private toastCtllr = inject(ToastController);
 
   onLoadAd = false;
   userId: string = '';
@@ -74,6 +75,17 @@ export class ChatAiComponent {
   }
 
   async sendMessage() {
+    if(this.newMessage.length <= 0) {
+      const toast = await this.toastCtllr.create({
+        message: 'No se encontro ningun mensaje!',
+        position: 'middle',
+        duration: 2000,
+      });
+  
+      toast.present();
+      return;
+    }
+
     const loading = await this.loadingCtllr.create();
     await loading.present();
 
@@ -156,7 +168,7 @@ export class ChatAiComponent {
       const loading = await this.loadingCtllr.create();
       await loading.present();
 
-      this.currentRubys = await this.supabaseSvc.addOneRuby();
+      this.currentRubys = Number(await this.supabaseSvc.addOneRuby());
 
       await loading.dismiss();
     });

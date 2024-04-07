@@ -3,9 +3,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AuxFnsService } from 'src/app/services/aux-fns.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { environment } from 'src/environments/environment';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
 import { AdmobService } from 'src/app/services/admob.service';
+import { GlassfyService } from 'src/app/services/glassfy.service';
 
 @Component({
   selector: 'app-home',
@@ -19,10 +20,17 @@ export class HomePage implements OnInit {
   private alertController = inject(AlertController);
   private modalController = inject(ModalController);
   private adMobSvc = inject(AdmobService);
+  private glassfySvc = inject(GlassfyService);
+  private toastCtllr = inject(ToastController);
 
-  onLoadAd = false;
+  // Glassfy
+  offerings: any;
+  user: any = {
+    vip: 'Gratuito'
+  };
+  vip: boolean = false;
+
   currentRubys:any;
-  // currentCategoryData:any;
   categories: any = [
     { 
       name: 'Salud Mental',
@@ -66,14 +74,38 @@ export class HomePage implements OnInit {
     },
   ];
 
-  constructor() { }
+  constructor() {
+    this.glassfySvc.initGlassfy();
+    this.offerings = this.glassfySvc.getOfferings();    
+  }
 
   async ngOnInit() {
     if(environment.production) {
       this.currentRubys = await this.supabaseSvc.getRubys();
     }
 
-    await this.banner();
+    this.glassfySvc.user$.subscribe(async user => {
+      const toast = await this.toastCtllr.create({
+        message: 'Subscribe user: ' + JSON.stringify(user),
+        position: 'bottom',
+        duration: 2000,
+      });
+  
+      toast.present();
+      if(user === undefined || user === null || (user?.vip != 'Gratuito' && user?.vip != 'VIP')) return;
+
+      this.user = user;
+      console.log('Subscribe user: ', user);
+      
+      this.vip = user.vip === 'Gratuito' ? false : true;
+      console.log('Is VIP: ', this.vip);
+
+      if(!this.vip) {
+        this.banner();
+      } else {
+        this.adMobSvc.removeBanner();
+      }
+    });
   }
 
   async banner() {
@@ -99,7 +131,7 @@ export class HomePage implements OnInit {
 
     modal.onDidDismiss()
       .then((data) => {
-        this.currentRubys = data['data'];
+        this.currentRubys = Number(data['data']);
     });
   
     await modal.present();
@@ -147,11 +179,22 @@ export class HomePage implements OnInit {
           role: 'accept',
           handler: async () => {
             await this.authSvc.signOutGoogle();
+            await this.glassfySvc.restore();
+            await this.adMobSvc.removeBanner();
             this.auxFns.navigateTo('/login');
           },
         }
       ],
     });
     await alert.present();
+  }
+
+  async purchase(sku: any) {
+    await this.glassfySvc.purchase(sku);
+  }
+
+  async restore() {
+    await this.glassfySvc.restore();
+    this.vip = false;
   }
 }
