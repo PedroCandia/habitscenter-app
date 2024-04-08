@@ -22,6 +22,7 @@ export class HomePage implements OnInit {
   private adMobSvc = inject(AdmobService);
   private glassfySvc = inject(GlassfyService);
   private toastCtllr = inject(ToastController);
+  private alertCtllr = inject(AlertController);
 
   // Glassfy
   offerings: any;
@@ -125,7 +126,8 @@ export class HomePage implements OnInit {
         // Aquí puedes pasar propiedades o datos adicionales al modal si es necesario
         // Ejemplo: data: { prop1: valor1, prop2: valor2 }
         currentCategoryData: categoryData,
-        currentRubys: this.currentRubys
+        currentRubys: this.currentRubys,
+        vip: this.vip
       }
     });
 
@@ -191,6 +193,7 @@ export class HomePage implements OnInit {
 
   async purchase(sku: any) {
     await this.glassfySvc.purchase(sku);
+    // Quitar el tamaño del anuncio que se tenia puesto
   }
 
   async restore() {

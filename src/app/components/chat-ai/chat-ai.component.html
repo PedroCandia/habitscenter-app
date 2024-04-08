@@ -4,15 +4,17 @@
       <ion-icon name="arrow-back-outline" style="width: 35px; height: 35px; margin-left: 0.5rem; cursor: pointer;" (click)="closeChat()"></ion-icon>
     </div>
     <ion-title>{{this.currentCategoryData.name}}</ion-title>
-    <ion-text slot="end" style="padding-right: .3rem;">{{currentRubys}}</ion-text>
-    <img slot="end" src="../../../assets/img/home/ruby_free.png" style="width: 35px; height: 35px; margin-right: 0.5rem;" />
+    <ion-text slot="end" style="padding-right: .3rem;">{{vip ? '∞' : currentRubys}}</ion-text>
+    <img slot="end" [src]="vip ? '../../../assets/img/home/ruby_vip.png' : '../../../assets/img/home/ruby_free.png'" style="width: 35px; height: 35px; margin-right: 0.5rem;" />
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div style="width: 100%; height: 8%; display: flex; justify-content: end; align-items: center; padding-right: 0.5rem;">
-    <ion-button color="warning" (click)="showRewardVideo()" [disabled]="onLoadAd">Ganar Rubys</ion-button>
-  </div>
+  @if(!vip) {
+    <div style="width: 100%; height: 8%; display: flex; justify-content: end; align-items: center; padding-right: 0.5rem;">
+      <ion-button color="warning" (click)="showRewardVideo()" [disabled]="onLoadAd">Ganar Rubys</ion-button>
+    </div>
+  }
 
   <ion-grid style="width: 100%; height: 82%; overflow-y: auto; padding: 0.5rem 0.5rem;">
     <ion-content #content>

@@ -43,7 +43,7 @@ export class GlassfyService {
       
       const alert = await this.alertCtllr.create({
         header: 'Error de compra',
-        message: error,
+        message: JSON.stringify(error),
         buttons: ['Aceptar']
       });
 
@@ -52,18 +52,12 @@ export class GlassfyService {
   }
 
   handleExistingPermissions(permissions: GlassfyPermission[]) {
-    let user;
+    let user = this.user.getValue();
     for(const perm of permissions) {
       if(perm.isValid) {
         if(perm.permissionId === 'remove_ads') {
-          user = this.user.getValue();
-          user.vip = 'VIP'
+          user.vip = 'VIP';
         }
-        // else if(perm.permissionId === 'rubys_infinitos') {
-        //   const user = this.user.getValue();
-        //   user.vip = 'VIP'
-        //   this.user.next(user);
-        // }
       }
     }
     return user;
@@ -75,66 +69,49 @@ export class GlassfyService {
 
   async purchase(sku: GlassfySku) {
     try {
-      const permissions:any = await Glassfy.purchaseSku({ sku });
-      console.log('Transaccion: ', permissions);
+      const transaction:any = await Glassfy.purchaseSku({ sku });
 
-      const toast = await this.toastCtllr.create({
-        message: 'Transaccion: ' + JSON.stringify(permissions),
-        position: 'top',
-        duration: 2000,
+      const alert = await this.alertCtllr.create({
+        header: 'Transaction all purchase',
+        message: JSON.stringify(transaction.permissions.all),
+        buttons: ['Aceptar']
       });
 
-      toast.present();
+      await alert.present();
+      
+      // era transaction.permissions.all no permissions.all
+      let user: any = this.handleExistingPermissions(transaction.permissions.all);
 
-      const user: any = this.handleExistingPermissions(permissions.all);
+      const alert1 = await this.alertCtllr.create({
+        header: 'final user purchase',
+        message: JSON.stringify(user),
+        buttons: ['Aceptar']
+      });
+
+      await alert1.present();
+
+      this.user.next(user);
+
       const toast1 = await this.toastCtllr.create({
-        message: 'Check user vip: ' + JSON.stringify(user),
-        position: 'top',
+        message: 'Compra finalizada exitosamente!',
+        position: 'bottom',
         duration: 2000,
       });
-
+  
       toast1.present();
-      if(user.vip) {
-        this.user.next({ vip: 'VIP' });
-      }
+      
+    } catch (error:any) {
+      console.log('Error de transaccion: ', error);
 
-      // if(transaction.receiptValidated) {
-      //   this.handleSuccessfulTransactionResult(transaction, sku);
-      // }
-    } catch (error) {
+      // Error es un objeto vacio, aqui entra
       const toast = await this.toastCtllr.create({
-        message: 'Transaccion error: ' + JSON.stringify(error),
-        position: 'top',
+        message: 'Error en la compra, vuelva a intentarlo mas tarde!',
+        position: 'bottom',
         duration: 2000,
       });
-
+  
       toast.present();
     }
-  }
-
-  async handleSuccessfulTransactionResult(
-    transaction: GlassfyTransaction,
-    sku: GlassfySku
-  ) {
-    if(transaction.productId.indexOf('vip_month_10') >= 0) {
-      const user = this.user.getValue();
-      user.vip = 'VIP'
-      this.user.next(user);
-    }
-
-    if(transaction.productId.indexOf('vip_yearly_100') >= 0) {
-      const user = this.user.getValue();
-      user.vip = 'VIP'
-      this.user.next(user);
-    }
-
-    const toast = await this.toastCtllr.create({
-      message: 'Gracias por tu compra!',
-      position: 'bottom',
-      duration: 2000,
-    });
-
-    toast.present();
   }
 
   async restore() {

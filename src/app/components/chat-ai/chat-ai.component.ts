@@ -19,6 +19,7 @@ import { RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem } fr
 export class ChatAiComponent {
   @Input() currentCategoryData: any;
   @Input() currentRubys: any;
+  @Input() vip: any;
   @ViewChild('content') content: any;
   @ViewChild('writeMessageInput') writeMessageInput: any;
   
