@@ -57,8 +57,11 @@
   --ion-color-dark-shade: #1e2023;
   --ion-color-dark-tint: #383a3e;
 
-    /** dark **/
-    --ion-color-always-dark: #222428;
+  /** dark **/
+  --ion-color-always-dark: #222428;
+
+  /** white **/
+  --ion-color-white: #f4f5f8;
 
   /** medium **/
   --ion-color-medium: #92949c;
@@ -135,6 +138,9 @@
 
     /** dark **/
     --ion-color-always-dark: #222428;
+
+    /** white **/
+    --ion-color-white: #f4f5f8;
 
     --ion-color-medium: #989aa2;
     --ion-color-medium-rgb: 152,154,162;

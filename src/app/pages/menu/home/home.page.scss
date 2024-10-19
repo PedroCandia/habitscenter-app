@@ -29,3 +29,15 @@ ion-item {
     border-radius: 19px;
     margin-bottom: 0.6rem;
 }
+
+.vip_btn {
+    width: 100%; 
+    display: flex; 
+    background: var(--ion-color-primary); 
+    border-radius: 5px; 
+    height: 4rem;
+    justify-content: space-between; 
+    align-items: center; 
+    padding-inline: 1rem; 
+    cursor: pointer;
+}

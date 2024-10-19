@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
+import { VipPlansComponent } from 'src/app/components/vip-plans/vip-plans.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,6 @@ import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
     IonicModule,
     HomePageRoutingModule
   ],
-  declarations: [HomePage, ChatAiComponent]
+  declarations: [HomePage, ChatAiComponent, VipPlansComponent]
 })
 export class HomePageModule {}

@@ -31,6 +31,8 @@ export class AdmobService {
     AdMob.addListener(BannerAdPluginEvents.SizeChanged, (size: AdMobBannerSize) => {
       // Subscribe Change Banner Size
       const appMargin = parseInt(String(size.height), 10);
+      console.log('AppMargin: ', appMargin);
+      
       if (appMargin > 0) {
         const app: any = document.querySelector('ion-app');
         app.style.marginBottom = appMargin + 'px';
@@ -54,5 +56,7 @@ export class AdmobService {
 
   removeBanner() {
     AdMob.removeBanner();
+    const app: any = document.querySelector('ion-app');
+    app.style.marginBottom = '0px';
   }
 }

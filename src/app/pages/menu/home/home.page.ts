@@ -7,6 +7,7 @@ import { AlertController, ModalController, ToastController } from '@ionic/angula
 import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
 import { AdmobService } from 'src/app/services/admob.service';
 import { GlassfyService } from 'src/app/services/glassfy.service';
+import { VipPlansComponent } from 'src/app/components/vip-plans/vip-plans.component';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,6 @@ export class HomePage implements OnInit {
   private alertCtllr = inject(AlertController);
 
   // Glassfy
-  offerings: any;
   user: any = {
     vip: 'Gratuito'
   };
@@ -76,8 +76,7 @@ export class HomePage implements OnInit {
   ];
 
   constructor() {
-    this.glassfySvc.initGlassfy();
-    this.offerings = this.glassfySvc.getOfferings();    
+    this.glassfySvc.initGlassfy();   
   }
 
   async ngOnInit() {
@@ -86,13 +85,6 @@ export class HomePage implements OnInit {
     }
 
     this.glassfySvc.user$.subscribe(async user => {
-      const toast = await this.toastCtllr.create({
-        message: 'Subscribe user: ' + JSON.stringify(user),
-        position: 'bottom',
-        duration: 2000,
-      });
-  
-      toast.present();
       if(user === undefined || user === null || (user?.vip != 'Gratuito' && user?.vip != 'VIP')) return;
 
       this.user = user;
@@ -101,7 +93,9 @@ export class HomePage implements OnInit {
       this.vip = user.vip === 'Gratuito' ? false : true;
       console.log('Is VIP: ', this.vip);
 
-      if(!this.vip) {
+      const userIsLoggedIn = this.authSvc.userIsLoggedIn();
+
+      if(!this.vip && userIsLoggedIn) {
         this.banner();
       } else {
         this.adMobSvc.removeBanner();
@@ -191,13 +185,16 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  async purchase(sku: any) {
-    await this.glassfySvc.purchase(sku);
-    // Quitar el tamaño del anuncio que se tenia puesto
-  }
-
   async restore() {
     await this.glassfySvc.restore();
     this.vip = false;
+  }
+
+  async openModalVIP() {
+    const modal = await this.modalController.create({
+      component: VipPlansComponent,
+    });
+  
+    await modal.present();
   }
 }

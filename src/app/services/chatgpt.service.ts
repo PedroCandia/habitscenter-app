@@ -46,7 +46,7 @@ export class ChatgptService {
       body: JSON.stringify({
         message:msg,
         specialty: spcy,
-        id: userId
+        id: userId,
       })
     };
     

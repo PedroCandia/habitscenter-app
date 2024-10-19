@@ -1,0 +1,52 @@
+<ion-content class="ion-padding">
+  <div>
+    <div style="display: flex; align-items: center;">
+      <div style="display: flex; justify-content: start; align-items: center;" slot="start">
+        <ion-icon name="arrow-back-outline" style="width: 25px; height: 25px; margin-left: 0.5rem; cursor: pointer;" (click)="closeModal()"></ion-icon>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 1rem;">
+      <ion-title>
+        VIP
+      </ion-title>
+    </div>
+  </div>
+
+  <div>
+    <ion-list lines="none"  style="--background: transparent;">
+      <ion-item style="--background: transparent">
+        <ion-icon name="remove-circle-outline" style="margin-right: 0.5rem;"></ion-icon>
+        SIN ANUNCIOS
+      </ion-item>
+      <ion-item>
+        <ion-icon name="infinite-outline" style="margin-right: 0.5rem;"></ion-icon>
+        PREGUNTAS ILIMITADAS
+      </ion-item>
+      <ion-item>
+        <ion-icon name="key-outline" style="margin-right: 0.5rem;"></ion-icon>
+        ACCESO A GPT-4
+      </ion-item>
+      <ion-item>
+        <ion-icon name="code-working-outline" style="font-size: 2rem; margin-right: 0.5rem;"></ion-icon>
+        MAXIMOS CARACTERES DE ENTRADA Y RESPUESTA
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ion-list  style="--background: transparent;">
+    <div *ngFor="let offeringGroup of offerings | async">
+      <ion-item *ngFor="let sku of offeringGroup.skus" style="--background: transparent;">
+        <ion-label>
+          <!-- si se agregan mas planes a la misma suscripcion se tiene que hacer un for al sku -->
+          {{ sku.product.title.replace('(HabitsCenter AI)','') }}
+          <!-- <p>{{ sku.product.description }}</p> -->
+        </ion-label>
+  
+        <ion-button slot="end" fill="outline" (click)="purchase(sku)">
+          {{ sku.product.price | currency: sku.product.currencyCode }}
+        </ion-button>
+      </ion-item>
+    </div>
+  </ion-list>
+</ion-content>

@@ -40,14 +40,6 @@ export class GlassfyService {
       this.offerings.next(offerings.all);
     } catch (error: any) {
       console.log('Error init glassfy: ', error);
-      
-      const alert = await this.alertCtllr.create({
-        header: 'Error de compra',
-        message: JSON.stringify(error),
-        buttons: ['Aceptar']
-      });
-
-      await alert.present();
     }
   }
 
@@ -70,26 +62,7 @@ export class GlassfyService {
   async purchase(sku: GlassfySku) {
     try {
       const transaction:any = await Glassfy.purchaseSku({ sku });
-
-      const alert = await this.alertCtllr.create({
-        header: 'Transaction all purchase',
-        message: JSON.stringify(transaction.permissions.all),
-        buttons: ['Aceptar']
-      });
-
-      await alert.present();
-      
-      // era transaction.permissions.all no permissions.all
       let user: any = this.handleExistingPermissions(transaction.permissions.all);
-
-      const alert1 = await this.alertCtllr.create({
-        header: 'final user purchase',
-        message: JSON.stringify(user),
-        buttons: ['Aceptar']
-      });
-
-      await alert1.present();
-
       this.user.next(user);
 
       const toast1 = await this.toastCtllr.create({

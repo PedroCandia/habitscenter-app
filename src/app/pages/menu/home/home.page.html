@@ -8,8 +8,8 @@
     </div>
 
     <div style="display: flex; align-items: center;">
-      <ion-text slot="end" style="padding-right: .3rem; color: var(--ion-color-dark);">{{ vip ? '∞' : currentRubys }}</ion-text>
-      <img slot="end" [src]="vip ? '../../../../assets/img/home/ruby_vip.png' : '../../../../assets/img/home/ruby_free.png'" style="width: 35px; height: 35px;" />
+      <ion-text (click)="openModalVIP()" slot="end" style="padding-right: .3rem; color: var(--ion-color-dark);">{{ vip ? '∞' : currentRubys }}</ion-text>
+      <img (click)="openModalVIP()" slot="end" [src]="vip ? '../../../../assets/img/home/ruby_vip.png' : '../../../../assets/img/home/ruby_free.png'" style="width: 35px; height: 35px;" />
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
@@ -42,25 +42,32 @@
   </ion-header>
   <ion-content class="ion-padding">
     <ion-list lines="none" style="--background: transparent; ">
-      <ion-label style="padding-left: 1rem;">
-        Suscripciones
-      </ion-label>
-      <div *ngFor="let offeringGroup of offerings | async">
-        <ion-item *ngFor="let sku of offeringGroup.skus">
-          <ion-label>
-            <!-- si se agregan mas planes a la misma suscripcion se tiene que hacer un for al sku -->
-            {{ sku.product.title }}
-            <p>{{ sku.product.description }}</p>
-          </ion-label>
+      @if(!vip) {
+        <!-- <ion-label style="padding-left: 1rem;">Mejorar a VIP</ion-label> -->
 
-          <ion-button slot="end" fill="outline" (click)="purchase(sku)">
-            {{ sku.product.price | currency: sku.product.currencyCode }}
-          </ion-button>
+        <ion-item style="--background: transparent; width: 100%;">
+          <div class="vip_btn" (click)="openModalVIP()">
+            <div style="color: var(--ion-color-white);">
+              Mejorar a VIP
+            </div>
+            <div>
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </div>
+          </div>
         </ion-item>
-      </div>
+      }
 
       <ion-item style="--background: transparent">
         <ion-label>Versión: {{ user.vip }}</ion-label>
+
+        @if(vip) {
+          <ion-icon slot="end" name="alert-circle-outline" id="top-center"></ion-icon>
+        }
+        <ion-popover trigger="top-center" side="top" alignment="center">
+          <ng-template>
+            <ion-content class="ion-padding">Para cancelar la suscripción entre a "suscripciones" en Play Store.</ion-content>
+          </ng-template>
+        </ion-popover>
       </ion-item>
       
       <ion-item style="--background: transparent" (click)="signOutGoogle()">

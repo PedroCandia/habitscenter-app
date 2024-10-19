@@ -10,6 +10,7 @@ import { MsgHistoryService } from 'src/app/services/msg-history.service';
 import { AdMob } from '@capacitor-community/admob';
 // AdMob Rewards
 import { RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem } from '@capacitor-community/admob';
+import { VipPlansComponent } from '../vip-plans/vip-plans.component';
 
 @Component({
   selector: 'app-chat-ai',
@@ -91,9 +92,8 @@ export class ChatAiComponent {
     await loading.present();
 
     let rubys = await this.supabaseSvc.getRubys();
-
-    if(rubys > 0) {
-      if(this.newMessage.length < 256) {
+    if(rubys > 0 || this.vip) {
+      if(this.newMessage.length < 256 || this.vip) {
         this.messages.push({ sender: 'user', text: this.newMessage });
         const msg = this.newMessage;
         this.newMessage = '';
@@ -105,8 +105,11 @@ export class ChatAiComponent {
           this.content.scrollToBottom(0);
         }, 0);
 
-        rubys = await this.supabaseSvc.removeOneRuby(rubys);
-        this.currentRubys -= 1;
+        if(!this.vip) {
+          rubys = await this.supabaseSvc.removeOneRuby(rubys);
+          this.currentRubys -= 1;
+        }
+
         await this.getMessageChatGPT(msg);
         this.msgHistorySvc.setMessages(this.currentCategoryData.name, this.messages);
       } else {
@@ -127,7 +130,7 @@ export class ChatAiComponent {
     if(!this.userId) {
       this.userId = this.authSvc.getUserID();
     }
-    const resChatGPT = await this.chatgptSvc.chatgpt(msg, this.currentCategoryData.name, this.userId);    
+    const resChatGPT = await this.chatgptSvc.chatgpt(msg, this.currentCategoryData.name, this.userId);
     this.messages.push({ sender: 'assistant', text: resChatGPT });
     // this.messages.push({ sender: 'assistant', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' });
   }
@@ -188,5 +191,13 @@ export class ChatAiComponent {
     };
     await AdMob.prepareRewardVideoAd(options);
     const rewardItem = await AdMob.showRewardVideoAd();
+  }
+
+  async openModalVIP() {
+    const modal = await this.modalController.create({
+      component: VipPlansComponent,
+    });
+  
+    await modal.present();
   }
 }
