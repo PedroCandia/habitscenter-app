@@ -19,7 +19,7 @@ export class AdmobService {
 
   constructor() {}
 
-  async initialize() {
+  async initializeAdMob() {
     await AdMob.initialize({});
   }
 
@@ -39,17 +39,15 @@ export class AdmobService {
       }
     });
 
-    if(!this.userId) {
-      this.userId = this.authSvc.getUserID();
-    }
+    // if(!this.userId) {
+    //   this.userId = this.authSvc.getUserID();
+    // }
     const options: BannerAdOptions = {
       adId: environment.google.addMob.ad_banner_id,
       adSize: BannerAdSize.BANNER,
       position: BannerAdPosition.BOTTOM_CENTER,
       margin: 0,
       isTesting: environment.google.addMob.isTesting,
-      
-      // npa: true
     };
     AdMob.showBanner(options);
   }

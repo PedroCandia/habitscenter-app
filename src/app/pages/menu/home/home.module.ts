@@ -6,6 +6,8 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
 import { VipPlansComponent } from 'src/app/components/vip-plans/vip-plans.component';
+import { AddHabitComponent } from 'src/app/components/add-habit/add-habit.component';
+import { ConfigHabitComponent } from 'src/app/components/config-habit/config-habit.component';
 
 @NgModule({
   imports: [
@@ -14,6 +16,6 @@ import { VipPlansComponent } from 'src/app/components/vip-plans/vip-plans.compon
     IonicModule,
     HomePageRoutingModule
   ],
-  declarations: [HomePage, ChatAiComponent, VipPlansComponent]
+  declarations: [HomePage, ChatAiComponent, VipPlansComponent, AddHabitComponent, ConfigHabitComponent]
 })
 export class HomePageModule {}

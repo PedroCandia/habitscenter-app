@@ -14,9 +14,9 @@ export class AuthStateGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): any {
-      if (!this.authSvc.isLoggedIn) return true;
+      // if (!this.authSvc.isLoggedIn) return true;
 
-      this.auxFns.navigateTo('/home');
+      // this.auxFns.navigateTo('/home');
   }
   
 }

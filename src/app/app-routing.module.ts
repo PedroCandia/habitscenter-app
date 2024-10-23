@@ -6,18 +6,17 @@ import { AuthStateGuard } from './guards/auth-state.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'tabs',
     pathMatch: 'full'
   },
   {
     path: 'login',
     loadChildren: () => import('./pages/auth/login/login.module').then( m => m.LoginPageModule),
-    canActivate: [AuthStateGuard]
+    // canActivate: [AuthStateGuard]
   },
   {
-    path: 'home',
-    loadChildren: () => import('./pages/menu/home/home.module').then( m => m.HomePageModule),
-    canActivate: [AuthGuard]
+    path: 'tabs',
+    loadChildren: () => import('./pages/menu/tabs/tabs.module').then( m => m.TabsPageModule ),
   },
 ];
 

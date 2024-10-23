@@ -3,27 +3,31 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AuxFnsService } from 'src/app/services/aux-fns.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { environment } from 'src/environments/environment';
-import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular';
 import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
 import { AdmobService } from 'src/app/services/admob.service';
-import { GlassfyService } from 'src/app/services/glassfy.service';
+// import { GlassfyService } from 'src/app/services/glassfy.service';
 import { VipPlansComponent } from 'src/app/components/vip-plans/vip-plans.component';
+import { AddHabitComponent } from 'src/app/components/add-habit/add-habit.component';
+import { ConfigHabitComponent } from 'src/app/components/config-habit/config-habit.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+// implements OnInit
+export class HomePage {
   public authSvc = inject(AuthService);
   private auxFns = inject(AuxFnsService);
   private supabaseSvc = inject(SupabaseService);
   private alertController = inject(AlertController);
   private modalController = inject(ModalController);
   private adMobSvc = inject(AdmobService);
-  private glassfySvc = inject(GlassfyService);
+  // private glassfySvc = inject(GlassfyService);
   private toastCtllr = inject(ToastController);
   private alertCtllr = inject(AlertController);
+  private navCtrl = inject(NavController);
 
   // Glassfy
   user: any = {
@@ -31,7 +35,7 @@ export class HomePage implements OnInit {
   };
   vip: boolean = false;
 
-  currentRubys:any;
+  currentRubys:any = 1;
   categories: any = [
     { 
       name: 'Salud Mental',
@@ -74,36 +78,111 @@ export class HomePage implements OnInit {
       color: '#ffe5fc'
     },
   ];
+  now: any;
+  monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  habits: any;
+  streak: number = 0;
 
   constructor() {
-    this.glassfySvc.initGlassfy();   
+    // this.glassfySvc.initGlassfy();
+
+    const date = new Date();
+    const today = date.getDate();
+    const currentMonth = this.monthNames[date.getMonth()];
+    this.now = today + ' ' + currentMonth + '.';
   }
 
-  async ngOnInit() {
-    if(environment.production) {
-      this.currentRubys = await this.supabaseSvc.getRubys();
-    }
+  ngOnInit() {
+    this.checkNewDay();
+    this.loadHabits();
+    this.loadStreak();
+    this.bannerAdMob();
+  }
+    // if(environment.production) {
+    //   this.currentRubys = await this.supabaseSvc.getRubys();
+    // }
 
-    this.glassfySvc.user$.subscribe(async user => {
-      if(user === undefined || user === null || (user?.vip != 'Gratuito' && user?.vip != 'VIP')) return;
+    // this.glassfySvc.user$.subscribe(async user => {
+    //   if(user === undefined || user === null || (user?.vip != 'Gratuito' && user?.vip != 'VIP')) return;
 
-      this.user = user;
-      console.log('Subscribe user: ', user);
+    //   this.user = user;
+    //   console.log('Subscribe user: ', user);
       
-      this.vip = user.vip === 'Gratuito' ? false : true;
-      console.log('Is VIP: ', this.vip);
+    //   this.vip = user.vip === 'Gratuito' ? false : true;
+    //   console.log('Is VIP: ', this.vip);
 
-      const userIsLoggedIn = this.authSvc.userIsLoggedIn();
+    //   const userIsLoggedIn = this.authSvc.userIsLoggedIn();
 
-      if(!this.vip && userIsLoggedIn) {
-        this.banner();
-      } else {
-        this.adMobSvc.removeBanner();
+    //   if(!this.vip && userIsLoggedIn) {
+    //     this.banner();
+    //   } else {
+    //     this.adMobSvc.removeBanner();
+    //   }
+    // });
+  // }
+
+  checkNewDay() {
+    this.loadHabits();
+    const today = new Date().toDateString(); // Fecha actual
+    const lastDate = localStorage.getItem('todayStreak'); // Última fecha guardada
+  
+    if (lastDate !== today) {
+      // Si es un nuevo día, restablecemos los hábitos y el todayStreak
+      this.resetHabits();
+    }
+  }
+
+  resetHabits() {
+    this.habits.forEach((habit: any) => {
+      habit.checked = false; // Restablecemos el "checked" de cada hábito a false
+    });
+    this.saveHabits(); // Guardamos los hábitos restablecidos en localStorage
+  }
+
+  loadHabits() {
+    const storedHabits = localStorage.getItem('habits');
+    if (storedHabits) {
+      this.habits = JSON.parse(storedHabits); // Cargamos los hábitos
+      console.log('Hábitos cargados: ', this.habits);
+    } else {
+      this.habits = []; // Si no hay hábitos guardados, inicializamos como un array vacío
+    }
+  }
+  
+
+  async openComponent() {
+    const modal = await this.modalController.create({
+      component: AddHabitComponent
+    });
+    
+    modal.onDidDismiss().then((event) => {
+      if (event.data && event.data?.nextComponent) {
+        if(event.data?.nextComponent) {
+          this.goToConfigHabitComponent();
+        }
       }
     });
+    
+    await modal.present();
   }
 
-  async banner() {
+  async goToConfigHabitComponent() {
+    const modal = await this.modalController.create({
+      component: ConfigHabitComponent
+    });
+
+    modal.onDidDismiss().then((event) => {
+      if (event.data && event.data?.loadHabits) {
+        if(event.data?.loadHabits) {
+          this.loadHabits();
+        }
+      }
+    });
+    
+    await modal.present();
+  }
+
+  async bannerAdMob() {
     await this.adMobSvc.banner();
   }
 
@@ -161,34 +240,34 @@ export class HomePage implements OnInit {
     this.currentRubys = rubys;
   }
 
-  async signOutGoogle() {
-    const alert = await this.alertController.create({
-      header: 'Cerrar sesión',
-      message: '¿Estás seguro de que deseas cerrar la sesión?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Aceptar',
-          role: 'accept',
-          handler: async () => {
-            await this.authSvc.signOutGoogle();
-            await this.glassfySvc.restore();
-            await this.adMobSvc.removeBanner();
-            this.auxFns.navigateTo('/login');
-          },
-        }
-      ],
-    });
-    await alert.present();
-  }
+  // async signOutGoogle() {
+  //   const alert = await this.alertController.create({
+  //     header: 'Cerrar sesión',
+  //     message: '¿Estás seguro de que deseas cerrar la sesión?',
+  //     buttons: [
+  //       {
+  //         text: 'Cancelar',
+  //         role: 'cancel',
+  //       },
+  //       {
+  //         text: 'Aceptar',
+  //         role: 'accept',
+  //         handler: async () => {
+  //           await this.authSvc.signOutGoogle();
+  //           await this.glassfySvc.restore();
+  //           await this.adMobSvc.removeBanner();
+  //           this.auxFns.navigateTo('/login');
+  //         },
+  //       }
+  //     ],
+  //   });
+  //   await alert.present();
+  // }
 
-  async restore() {
-    await this.glassfySvc.restore();
-    this.vip = false;
-  }
+  // async restore() {
+  //   await this.glassfySvc.restore();
+  //   this.vip = false;
+  // }
 
   async openModalVIP() {
     const modal = await this.modalController.create({
@@ -196,5 +275,58 @@ export class HomePage implements OnInit {
     });
   
     await modal.present();
+  }
+
+  toggleCheck(habit: any) {
+    // Si el hábito ya está marcado, no hacer nada
+    if (habit.checked) {
+      console.log('Habit is already checked, no action taken.');
+      this.loadHabits();
+      return; // Salir de la función si ya está marcado
+    }
+
+    console.log('Habit checked: ', habit);
+    // Alterna el estado de "checked" del hábito
+    habit.checked = !habit.checked;
+    
+    // Guardar los hábitos actualizados en el localStorage
+    this.saveHabits();
+
+    // Verificar si todos los hábitos están completados para incrementar la racha
+    this.checkStreak();
+  }
+
+  saveHabits() {
+    // Convertimos la lista de hábitos a string y la guardamos en localStorage
+    localStorage.setItem('habits', JSON.stringify(this.habits));
+    this.loadHabits();
+  }
+
+  checkStreak() {
+    const today = new Date().toDateString(); // Fecha de hoy
+    const todayStreak = localStorage.getItem('todayStreak');
+    // Verificar si todos los hábitos están marcados como "checked"
+    const allChecked = this.habits.every((habit:any) => habit.checked);
+  
+    if (allChecked && todayStreak !== today) {
+      this.streak++; // Incrementar la racha
+      this.saveStreak(today); // Guardar la nueva racha en localStorage
+    }
+  }
+
+  saveStreak(today: string) {
+    // Guardar la racha en localStorage
+    localStorage.setItem('streak', this.streak.toString());
+    // Guardar que ya se incrementó la racha hoy
+    localStorage.setItem('todayStreak', today);
+  }
+
+  loadStreak() {
+    const storedStreak = localStorage.getItem('streak');
+    if (storedStreak) {
+      this.streak = parseInt(storedStreak, 10); // Cargar la racha
+    } else {
+      this.streak = 0; // Inicializar racha en 0 si no existe
+    }
   }
 }

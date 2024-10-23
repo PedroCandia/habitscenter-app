@@ -20,77 +20,77 @@ export class GlassfyService {
 
   constructor() {}
 
-  async initGlassfy() {
-    try {
-      await Glassfy.initialize({
-        apiKey: environment.glassfy.key,
-        watcherMode: false
-      });
+  // async initGlassfy() {
+  //   try {
+  //     await Glassfy.initialize({
+  //       apiKey: environment.glassfy.key,
+  //       watcherMode: false
+  //     });
 
-      const userId = this.authSvc.getUserID();
-      await Glassfy.connectCustomSubscriber({ subscriberId: userId });
+  //     const userId = this.authSvc.getUserID();
+  //     await Glassfy.connectCustomSubscriber({ subscriberId: userId });
 
-      const permissions = await Glassfy.permissions();
-      console.log('permissions: ', permissions);
-      const user: any = this.handleExistingPermissions(permissions.all);
-      this.user.next(user);
+  //     const permissions = await Glassfy.permissions();
+  //     console.log('permissions: ', permissions);
+  //     const user: any = this.handleExistingPermissions(permissions.all);
+  //     this.user.next(user);
 
-      const offerings = await Glassfy.offerings();
-      console.log('OFFERINGS: ', offerings);
-      this.offerings.next(offerings.all);
-    } catch (error: any) {
-      console.log('Error init glassfy: ', error);
-    }
-  }
+  //     const offerings = await Glassfy.offerings();
+  //     console.log('OFFERINGS: ', offerings);
+  //     this.offerings.next(offerings.all);
+  //   } catch (error: any) {
+  //     console.log('Error init glassfy: ', error);
+  //   }
+  // }
 
-  handleExistingPermissions(permissions: GlassfyPermission[]) {
-    let user = this.user.getValue();
-    for(const perm of permissions) {
-      if(perm.isValid) {
-        if(perm.permissionId === 'remove_ads') {
-          user.vip = 'VIP';
-        }
-      }
-    }
-    return user;
-  }
+  // handleExistingPermissions(permissions: GlassfyPermission[]) {
+  //   let user = this.user.getValue();
+  //   for(const perm of permissions) {
+  //     if(perm.isValid) {
+  //       if(perm.permissionId === 'remove_ads') {
+  //         user.vip = 'VIP';
+  //       }
+  //     }
+  //   }
+  //   return user;
+  // }
 
-  getOfferings() {
-    return this.offerings.asObservable();
-  }
+  // getOfferings() {
+  //   return this.offerings.asObservable();
+  // }
 
-  async purchase(sku: GlassfySku) {
-    try {
-      const transaction:any = await Glassfy.purchaseSku({ sku });
-      let user: any = this.handleExistingPermissions(transaction.permissions.all);
-      this.user.next(user);
+  // async purchase(sku: GlassfySku) {
+  //   try {
+  //     const transaction:any = await Glassfy.purchaseSku({ sku });
+  //     let user: any = this.handleExistingPermissions(transaction.permissions.all);
+  //     this.user.next(user);
 
-      const toast1 = await this.toastCtllr.create({
-        message: 'Compra finalizada exitosamente!',
-        position: 'bottom',
-        duration: 2000,
-      });
+  //     const toast1 = await this.toastCtllr.create({
+  //       message: 'Compra finalizada exitosamente!',
+  //       position: 'bottom',
+  //       duration: 2000,
+  //     });
   
-      toast1.present();
+  //     toast1.present();
       
-    } catch (error:any) {
-      console.log('Error de transaccion: ', error);
+  //   } catch (error:any) {
+  //     console.log('Error de transaccion: ', error);
 
-      // Error es un objeto vacio, aqui entra
-      const toast = await this.toastCtllr.create({
-        message: 'Error en la compra, vuelva a intentarlo mas tarde!',
-        position: 'bottom',
-        duration: 2000,
-      });
+  //     // Error es un objeto vacio, aqui entra
+  //     const toast = await this.toastCtllr.create({
+  //       message: 'Error en la compra, vuelva a intentarlo mas tarde!',
+  //       position: 'bottom',
+  //       duration: 2000,
+  //     });
   
-      toast.present();
-    }
-  }
+  //     toast.present();
+  //   }
+  // }
 
-  async restore() {
-    const permissions = await Glassfy.restorePurchases();
-    this.user.next({ vip: 'Gratuito' });
-    this.offerings.next([]);
-    console.log('Permisos vip: ', permissions);
-  }
+  // async restore() {
+  //   const permissions = await Glassfy.restorePurchases();
+  //   this.user.next({ vip: 'Gratuito' });
+  //   this.offerings.next([]);
+  //   console.log('Permisos vip: ', permissions);
+  // }
 }

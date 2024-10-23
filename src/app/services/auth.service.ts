@@ -18,53 +18,53 @@ export class AuthService {
   isLoggedIn: boolean = false;
   userData: any;
   accessToken: any;
-  supabaseSvc = inject(SupabaseService);
+  // supabaseSvc = inject(SupabaseService);
 
   constructor(private auxFns: AuxFnsService) { }
 
-  async loginWithGoogle() {
-    let googleUser;
+  // async loginWithGoogle() {
+  //   let googleUser;
 
-    try {
-      googleUser = await GoogleAuth.signIn();
-      this.userData = googleUser;
-      this.userData.displayName = this.auxFns.filterNameTwoWords(this.userData.displayName);
-      localStorage.setItem('userData', JSON.stringify(this.userData));
-      await this.supabaseSvc.createUser(this.userData);
-    } catch (error) {
-      console.log('ERROR GOOGLE AUTH: ', error);
-    }
+  //   try {
+  //     googleUser = await GoogleAuth.signIn();
+  //     this.userData = googleUser;
+  //     this.userData.displayName = this.auxFns.filterNameTwoWords(this.userData.displayName);
+  //     localStorage.setItem('userData', JSON.stringify(this.userData));
+  //     await this.supabaseSvc.createUser(this.userData);
+  //   } catch (error) {
+  //     console.log('ERROR GOOGLE AUTH: ', error);
+  //   }
     
-    return googleUser;
-  }
+  //   return googleUser;
+  // }
 
-  userIsLoggedIn() {
-    const userData = localStorage.getItem('userData');
-    if(userData) {
-      this.userData = JSON.parse(userData);
-    } else {
-      return false;
-    }
+  // userIsLoggedIn() {
+  //   const userData = localStorage.getItem('userData');
+  //   if(userData) {
+  //     this.userData = JSON.parse(userData);
+  //   } else {
+  //     return false;
+  //   }
 
-    if(this.userData?.authentication) {
-      return this.userData.authentication.accessToken;
-    }
+  //   if(this.userData?.authentication) {
+  //     return this.userData.authentication.accessToken;
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
-  async refreshGoogle() {
-    const userAuthCode = await GoogleAuth.refresh();
-    this.accessToken = userAuthCode;
-    return userAuthCode;
-  }
+  // async refreshGoogle() {
+  //   const userAuthCode = await GoogleAuth.refresh();
+  //   this.accessToken = userAuthCode;
+  //   return userAuthCode;
+  // }
 
-  async signOutGoogle() {
-    await GoogleAuth.signOut();
-    this.userData = null;
-    this.isLoggedIn = false;
-    localStorage.clear();
-  }
+  // async signOutGoogle() {
+  //   await GoogleAuth.signOut();
+  //   this.userData = null;
+  //   this.isLoggedIn = false;
+  //   localStorage.clear();
+  // }
 
   getUserName() {
     return this.userData?.displayName || '';

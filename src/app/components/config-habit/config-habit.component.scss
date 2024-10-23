@@ -1,0 +1,30 @@
+ion-content {
+    --background: var(--ion-color-always-dark);
+}
+
+.header {
+    height: 2rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    ion-icon {
+        font-size: 1.5rem;
+    }
+}
+
+ion-list {
+    padding: 0;    
+}
+
+ion-list, ion-item, ion-input {
+    --background: transparent !important;
+    --ion-background-color: transparent;
+    --ion-background: transparent;
+}
+
+ion-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

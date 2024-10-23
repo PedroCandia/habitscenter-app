@@ -1,0 +1,15 @@
+.header {
+  height: 2rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
+  ion-text {
+    font-weight: 600;
+  }
+}
+
+ion-icon {
+  font-size: 1.5rem;
+  padding-right: 0.3rem;
+}

@@ -7,24 +7,24 @@ import { AuxFnsService } from 'src/app/services/aux-fns.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
 
   constructor(private authSvc: AuthService, private auxFns: AuxFnsService) { }
 
-  async ngOnInit() {
-    const accessToken = await this.authSvc.refreshGoogle();
-    if(accessToken) {
-      this.auxFns.navigateTo('/home');
-      this.authSvc.isLoggedIn = true;
-    }
-  }
+  // async ngOnInit() {
+    // const accessToken = await this.authSvc.refreshGoogle();
+    // if(accessToken) {
+    //   this.auxFns.navigateTo('/home');
+    //   this.authSvc.isLoggedIn = true;
+    // }
+  // }
 
   async loginWithGoogle() {    
-    const user = await this.authSvc.loginWithGoogle();
+    // const user = await this.authSvc.loginWithGoogle();
 
-    if(user) {      
-      this.auxFns.navigateTo('/home');
-      this.authSvc.isLoggedIn = true;
-    }
+    // if(user) {      
+    //   this.auxFns.navigateTo('/home');
+    //   this.authSvc.isLoggedIn = true;
+    // }
   }
 }

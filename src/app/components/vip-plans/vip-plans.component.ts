@@ -14,7 +14,7 @@ export class VipPlansComponent  implements OnInit {
   offerings: any;
 
   constructor() {
-    this.offerings = this.glassfySvc.getOfferings();  
+    // this.offerings = this.glassfySvc.getOfferings();  
   }
 
   ngOnInit() {}
@@ -24,8 +24,8 @@ export class VipPlansComponent  implements OnInit {
     this.modalController.dismiss();
   }
 
-  async purchase(sku: any) {
-    await this.glassfySvc.purchase(sku);
-    // Quitar el tamaño del anuncio que se tenia puesto
-  }
+  // async purchase(sku: any) {
+  //   await this.glassfySvc.purchase(sku);
+  //   // Quitar el tamaño del anuncio que se tenia puesto
+  // }
 }

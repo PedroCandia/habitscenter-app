@@ -6,12 +6,12 @@ import { AdmobService } from './services/admob.service';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit{
   private adMobSvc = inject(AdmobService);
 
   constructor() { }
 
   async ngOnInit() {
-    await this.adMobSvc.initialize();
+    await this.adMobSvc.initializeAdMob();
   }
 }
