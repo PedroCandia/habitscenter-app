@@ -61,6 +61,22 @@ export class ChatAiPage implements OnInit {
   async getAllMessages() {
     // this.userId = this.authSvc.getUserID();
     let allMessages = await this.chatgptSvc.getAllMessages(this.userId, this.chatBotName);
+
+    if(allMessages == "Network response wasnt ok") {
+      allMessages = [
+        {
+          role:"assistant",
+          content: [
+            {
+              text: {
+                value: "Network response wasnt ok",
+              }
+            }
+          ]
+        }
+      ]
+    }
+
     allMessages = allMessages.reverse();
     
     allMessages.map((body: any, index:any) => {

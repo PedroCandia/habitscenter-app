@@ -5,7 +5,7 @@
 
   <!-- Formulario de hábitos con inputs nativos -->
   <div style="padding: 16px;">
-    <div style="margin-bottom: 16px;">
+    <div class="margin-bottom">
       <label for="habitName" style="color: white; display: block; margin-bottom: 8px;">Nombre de hábito</label>
       <input id="habitName" type="text" maxlength="30" placeholder="Nombre de hábito" 
              [(ngModel)]="habitName" 
@@ -21,17 +21,23 @@
           'background-color': selectedColor || 'transparent',
           'border': selectedColor ? 'none' : '2px solid white'
         }" 
-        style="width: 40px; height: 40px; border-radius: 50%;">
+        style="width: 35px; height: 35px; border-radius: 50%;">
       </div>
     </div>
 
     <!-- Selector de icono -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;" (click)="setIconModalOpen(true)">
+    <div class="margin-bottom" style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;" (click)="setIconModalOpen(true)">
       <span style="color: white;">Selecciona un icono</span>
-      <div style="color: white; font-size: 24px;">
-        <ion-icon [name]="selectedIcon || 'help-outline'"></ion-icon>
+      <div style="color: white; font-size: 24px; width: 35px; display: flex; justify-content: center; align-items: center;">
+        <ion-icon [name]="selectedIcon || 'add-outline'"></ion-icon>
       </div>
     </div>
+
+    @if(errorMsg) {
+      <div class="errorMsg" style="font-size: 0.8rem;">
+        <ion-text>Debe ingresar al menos un nombre o ícono.</ion-text>
+      </div>
+    }
   </div>
 
   <!-- Botón de guardar fijo abajo -->
@@ -41,31 +47,31 @@
     </ion-button>
   </div>
 
-  <ion-modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" [isOpen]="isModalOpen"
+  <ion-modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75, 1]" [isOpen]="isModalOpen"
     (willDismiss)="setModalOpen(false)">
     <ng-template>
       <ion-content class="ion-padding">
         <ion-grid>
           <ion-row>
             <ion-col size="4" (click)="selectColor('#ff0000');">
-              <div style="background-color: #ff0000; width: 40px; height: 40px; border-radius: 50%;"></div>
+              <div style="background-color: #ff0000; width: 50px; height: 50px; border-radius: 50%;"></div>
             </ion-col>
             <ion-col size="4" (click)="selectColor('#00ff00');">
-              <div style="background-color: #00ff00; width: 40px; height: 40px; border-radius: 50%;"></div>
+              <div style="background-color: #00ff00; width: 50px; height: 50px; border-radius: 50%;"></div>
             </ion-col>
             <ion-col size="4" (click)="selectColor('#0000ff');">
-              <div style="background-color: #0000ff; width: 40px; height: 40px; border-radius: 50%;"></div>
+              <div style="background-color: #0000ff; width: 50px; height: 50px; border-radius: 50%;"></div>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="4" (click)="selectColor('#ff00ff');">
-              <div style="background-color: #ff00ff; width: 40px; height: 40px; border-radius: 50%;"></div>
+              <div style="background-color: #ff00ff; width: 50px; height: 50px; border-radius: 50%;"></div>
             </ion-col>
             <ion-col size="4" (click)="selectColor('#ffff00');">
-              <div style="background-color: #ffff00; width: 40px; height: 40px; border-radius: 50%;"></div>
+              <div style="background-color: #ffff00; width: 50px; height: 50px; border-radius: 50%;"></div>
             </ion-col>
-            <ion-col size="4" (click)="selectColor('#000000');">
-              <div style="background-color: #000000; width: 40px; height: 40px; border-radius: 50%;"></div>
+            <ion-col size="4" (click)="selectColor('#222222');">
+              <div style="background-color: #222222; width: 50px; height: 50px; border-radius: 50%;"></div>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -74,32 +80,17 @@
   </ion-modal>
 
   <!-- Modal para selección de iconos -->
-  <ion-modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]" [isOpen]="isIconModalOpen"
+  <ion-modal [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75, 1]" [isOpen]="isIconModalOpen"
     (willDismiss)="setIconModalOpen(false)">
     <ng-template>
       <ion-content class="ion-padding">
         <ion-grid>
           <ion-row>
-            <ion-col size="4" (click)="selectIcon('fitness-outline');">
-              <ion-icon name="fitness-outline" style="font-size: 32px; color: white;"></ion-icon>
-            </ion-col>
-            <ion-col size="4" (click)="selectIcon('book-outline');">
-              <ion-icon name="book-outline" style="font-size: 32px; color: white;"></ion-icon>
-            </ion-col>
-            <ion-col size="4" (click)="selectIcon('timer-outline');">
-              <ion-icon name="timer-outline" style="font-size: 32px; color: white;"></ion-icon>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="4" (click)="selectIcon('heart-outline');">
-              <ion-icon name="heart-outline" style="font-size: 32px; color: white;"></ion-icon>
-            </ion-col>
-            <ion-col size="4" (click)="selectIcon('musical-notes-outline');">
-              <ion-icon name="musical-notes-outline" style="font-size: 32px; color: white;"></ion-icon>
-            </ion-col>
-            <ion-col size="4" (click)="selectIcon('flame-outline');">
-              <ion-icon name="flame-outline" style="font-size: 32px; color: white;"></ion-icon>
-            </ion-col>
+            @for(icon of iconList; track $index) {
+              <ion-col size="4" (click)="selectIcon(icon);" class="margin-bottom">
+                <ion-icon [name]="icon" style="font-size: 32px; color: white;"></ion-icon>
+              </ion-col>
+            }
           </ion-row>
         </ion-grid>
       </ion-content>

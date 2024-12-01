@@ -25,15 +25,22 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+.margin-bottom {
+    margin-bottom: 1rem;
+}
+
 .btn {
     --padding-top: 10px;
     --padding-bottom: 10px;
     margin: 0;
 }
 
-
 ion-content::part(background) {
     --background: #000000;  /* fallback for old browsers */
     --background: -webkit-linear-gradient(to top, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
     --background: linear-gradient(to top, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.errorMsg {
+    color: red;
 }
