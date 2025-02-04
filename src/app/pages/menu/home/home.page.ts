@@ -10,6 +10,7 @@ import { AdmobService } from 'src/app/services/admob.service';
 import { VipPlansComponent } from 'src/app/components/vip-plans/vip-plans.component';
 import { AddHabitComponent } from 'src/app/components/add-habit/add-habit.component';
 import { ConfigHabitComponent } from 'src/app/components/config-habit/config-habit.component';
+import { AddSerieComponent } from 'src/app/components/add-serie/add-serie.component';
 
 @Component({
   selector: 'app-home',
@@ -82,6 +83,7 @@ export class HomePage {
   monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
   habits: any;
   streak: number = 0;
+  flexiones: number = 0;
 
   constructor() {
     // this.glassfySvc.initGlassfy();
@@ -95,6 +97,9 @@ export class HomePage {
   ngOnInit() {
     this.checkNewDay();
     this.loadHabits();
+
+    this.loadFlexiones();
+
     this.loadStreak();
     this.bannerAdMob();
   }
@@ -152,7 +157,7 @@ export class HomePage {
 
   async openComponent() {
     const modal = await this.modalController.create({
-      component: AddHabitComponent
+      component: AddSerieComponent
     });
     
     modal.onDidDismiss().then((event) => {
@@ -327,6 +332,15 @@ export class HomePage {
       this.streak = parseInt(storedStreak, 10); // Cargar la racha
     } else {
       this.streak = 0; // Inicializar racha en 0 si no existe
+    }
+  }
+
+  loadFlexiones() {
+    const storedFlexiones = localStorage.getItem('flexiones');
+    if (storedFlexiones) {
+      this.flexiones = parseInt(storedFlexiones, 10); // Cargar la racha
+    } else {
+      this.flexiones = 0; // Inicializar racha en 0 si no existe
     }
   }
 }

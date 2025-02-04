@@ -1,111 +1,53 @@
 <ion-content class="ion-padding">
   <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; height: fit-content;">
     <div style="display: flex; align-items: center;">
-      <ion-text style="color: white; font-size: 1.5rem;">{{now}}</ion-text>
-      <ion-text style="color: rgb(219, 219, 219); font-size: 1rem; display: flex; justify-content: center; align-items: center;">
+      <ion-text style="font-size: 1.5rem;">2025</ion-text>
+
+      <!-- <ion-text style="color: rgb(219, 219, 219); font-size: 1rem; display: flex; justify-content: center; align-items: center;">
         <ion-icon name="flame-outline" style="padding-right: 0.2rem;"></ion-icon> {{streak}} días
-      </ion-text>
-      <!-- <ion-avatar style="width: 35px; height: 35px; margin-left: 0.5rem;"> -->
-        <!-- <img alt="Foto de perfil de google" src="{{authSvc.getUserImageUrl()}}" /> -->
-        <!-- <img alt="Foto de perfil de google" src="../../../../assets/img/login/icon.png" /> -->
-      <!-- </ion-avatar> -->
-      <!-- <ion-title>{{authSvc.getUserName() || 'UserName'}}</ion-title> -->
-      <!-- <ion-title>{{'Pedro Candia'}}</ion-title> -->
+      </ion-text> -->
     </div>
 
     <div style="display: flex; align-items: center;">
-      <!-- <ion-text (click)="openModalVIP()" slot="end" style="padding-right: .3rem; color: var(--ion-color-dark);">{{ vip ? '∞' : currentRubys }}</ion-text>
-      <img (click)="openModalVIP()" slot="end" [src]="vip ? '../../../../assets/img/home/ruby_vip.png' : '../../../../assets/img/home/ruby_free.png'" style="width: 35px; height: 35px;" />
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons> -->
-
-      <ion-icon
+      <ion-text>{{now}}</ion-text>
+      <!-- <ion-icon
         name="add-circle-outline"
         slot="end"
         style="font-size: 2rem;"
-        (click)="openComponent()"></ion-icon>
+        (click)="openComponent()"></ion-icon> -->
     </div>
   </div>
 
+  <div style="text-align: center; padding-top: 3rem;">
+    <ion-text style="font-size: 1.5rem;">{{flexiones}} Flexiones</ion-text>
+  </div>
+
+  <div style="position: relative; display: flex; justify-content: center; align-items: center; padding-top: 5rem; padding-bottom: 5rem;">
+    <img src="../../../../assets/img/home/flexion.png"
+      alt=""
+      style="position: relative; z-index: 2;">
+    <img src="../../../../assets/img/home/Ellipse 11.png"
+      alt=""
+      style="position: absolute; z-index: 1;">
+  </div>
+
+  <div class="card" style="width: 100%; display: flex; justify-content: center; align-items: center;">
+    <div class="card-content" style="background-color: #F3F6FB; width: 90%; border-radius: 24px; display: flex; justify-content: space-evenly; align-items: center;"
+    (click)="openComponent()">
+      <img src="../../../../assets/img/home/flexion-card.png" alt="">
+      <ion-text style="font-size: 0.9rem; padding: 0; font-weight: 600;">No hay registro para hoy</ion-text>
+      <ion-icon name="add-outline" style="color: #7C4DFF; font-size: 1.3rem;"></ion-icon>
+    </div>
+  </div>
+<!-- 
   <ion-list lines="none">
     <div *ngFor="let habit of habits" style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-      <!-- Círculo para hacer check -->
       <ion-checkbox (click)="toggleCheck(habit)" [(ngModel)]="habit.checked" style="margin-right: 0.5rem;"></ion-checkbox>
   
-      <!-- ion-item contenido -->
       <ion-item style="color: white; margin: 0; width: 100%;" [style.--background]="habit.color">
         <ion-icon [name]="habit.icon" style="margin-right: 10px; font-size: 24px;"></ion-icon>
         <ion-label>{{ habit.name }}</ion-label>
       </ion-item>
     </div>
-  </ion-list>
-  
-
-  <!-- <ion-list lines="none">
-    <ion-item *ngFor="let habit of habits" style="color: white;">
-      <ion-icon [name]="habit.icon" style="margin-right: 10px; font-size: 24px;"></ion-icon>
-      <ion-label>{{ habit.name }}</ion-label>
-      <div [ngStyle]="{ 'background-color': habit.color, 'width': '20px', 'height': '20px', 'border-radius': '50%' }"></div>
-    </ion-item>
   </ion-list> -->
-
-  <!-- <ion-list lines="none">
-    @for(categoryData of categories; track $index) {
-      <ion-item (click)="goToChat(categoryData)" [ngStyle]="{'--background': categoryData.color}">
-        <ion-avatar>
-          <img alt="{{categoryData.name}}" src="{{categoryData.url}}" />
-        </ion-avatar>
-        <ion-text>{{categoryData.name}}</ion-text>
-      </ion-item>
-    }
-  </ion-list> -->
-  <!-- <app-chat-ai [currentCategoryData]='currentCategoryData' (removeOneRuby)="removeOneRuby($event)"></app-chat-ai> -->
 </ion-content>
-
-<!-- <ion-menu contentId="main-content" side="end">
-  <ion-header>
-    <ion-toolbar>
-      <div style="display: flex; align-items: center; margin-inline: 0.5rem;">
-        <ion-menu-toggle>
-          <ion-icon name="arrow-back-outline" style="font-size: 1.6rem;"></ion-icon>
-        </ion-menu-toggle>
-        <ion-title>Configuración</ion-title>
-      </div>
-    </ion-toolbar>
-  </ion-header> -->
-  <!-- <ion-content class="ion-padding">
-    <ion-list lines="none" style="--background: transparent; ">
-      @if(!vip) {
-        <ion-item style="--background: transparent; width: 100%;">
-          <div class="vip_btn" (click)="openModalVIP()">
-            <div style="color: var(--ion-color-white);">
-              Mejorar a VIP
-            </div>
-            <div>
-              <ion-icon name="chevron-forward-outline"></ion-icon>
-            </div>
-          </div>
-        </ion-item>
-      }
-
-      <ion-item style="--background: transparent">
-        <ion-label>Versión: {{ user.vip }}</ion-label>
-
-        @if(vip) {
-          <ion-icon slot="end" name="alert-circle-outline" id="top-center"></ion-icon>
-        }
-        <ion-popover trigger="top-center" side="top" alignment="center">
-          <ng-template>
-            <ion-content class="ion-padding">Para cancelar la suscripción entre a "suscripciones" en Play Store.</ion-content>
-          </ng-template>
-        </ion-popover>
-      </ion-item>
-      
-      <ion-item style="--background: transparent" (click)="signOutGoogle()">
-        <ion-label>Cerrar sesión</ion-label>
-        <ion-icon slot="end" name="log-in-outline" style="width: 35px; height: 35px; padding: 0 0.5rem;" color="danger"></ion-icon>
-      </ion-item>
-    </ion-list>
-  </ion-content> -->
-<!-- </ion-menu> -->
