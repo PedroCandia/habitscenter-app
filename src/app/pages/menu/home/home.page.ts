@@ -84,6 +84,8 @@ export class HomePage {
   habits: any;
   streak: number = 0;
   flexiones: number = 0;
+  todayFormatted: any;
+  valueTodayFormatted: any;
 
   constructor() {
     // this.glassfySvc.initGlassfy();
@@ -91,16 +93,18 @@ export class HomePage {
     const date = new Date();
     const today = date.getDate();
     const currentMonth = this.monthNames[date.getMonth()];
-    this.now = today + ' ' + currentMonth + '.';
+    this.now = today + ' ' + currentMonth;
+
+    this.todayFormatted = `${String(date.getDate()).padStart(2, '0')}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getFullYear()).slice(-2)}`;
   }
 
   ngOnInit() {
-    this.checkNewDay();
-    this.loadHabits();
+    // this.checkNewDay();
+    // this.loadHabits();
 
     this.loadFlexiones();
 
-    this.loadStreak();
+    // this.loadStreak();
     this.bannerAdMob();
   }
     // if(environment.production) {
@@ -161,14 +165,41 @@ export class HomePage {
     });
     
     modal.onDidDismiss().then((event) => {
-      if (event.data && event.data?.nextComponent) {
-        if(event.data?.nextComponent) {
-          this.goToConfigHabitComponent();
+      if (event.data && event.data?.flexiones) {
+        if(event.data?.flexiones) {
+          this.saveFlexiones(event.data.flexiones);
         }
       }
+      // if (event.data && event.data?.nextComponent) {
+      //   if(event.data?.nextComponent) {
+      //     this.goToConfigHabitComponent();
+      //   }
+      // }
     });
     
     await modal.present();
+  }
+
+  saveFlexiones(flexiones:any) {
+    const date = new Date();
+    // Crear un nuevo registro con el número de flexiones y la hora exacta
+    const newEntry = {
+      flexiones: Number(flexiones),
+      timestamp: Date.now()
+    };
+
+    // Convertimos la lista de hábitos a string y la guardamos en localStorage
+    this.flexiones = Number(this.flexiones) + Number(flexiones);
+    localStorage.setItem('flexiones', JSON.stringify(this.flexiones));
+    console.log('New flexiones: ', this.flexiones);
+
+    // Agregar el nuevo registro al array
+    this.valueTodayFormatted.push(newEntry);
+
+    // Guardar en localStorage con la fecha como clave
+    localStorage.setItem(this.todayFormatted, JSON.stringify(this.valueTodayFormatted));
+
+    console.log(`Flexiones registradas para ${this.todayFormatted}:`, this.valueTodayFormatted);
   }
 
   async goToConfigHabitComponent() {
@@ -339,8 +370,21 @@ export class HomePage {
     const storedFlexiones = localStorage.getItem('flexiones');
     if (storedFlexiones) {
       this.flexiones = parseInt(storedFlexiones, 10); // Cargar la racha
+      console.log('Flexiones: ', this.flexiones);
+      
     } else {
       this.flexiones = 0; // Inicializar racha en 0 si no existe
+      console.log('Flexiones init: ', this.flexiones);
+    }
+
+    this.valueTodayFormatted = JSON.parse(localStorage.getItem(this.todayFormatted) || '[]');
+    
+    console.log('valueTodayFormatted: ', this.valueTodayFormatted);
+    
+
+    if (this.valueTodayFormatted.length == 0) {
+      localStorage.setItem(this.todayFormatted, JSON.stringify([]));
+      console.log('Nuevo día, flexiones reiniciadas.');
     }
   }
 }

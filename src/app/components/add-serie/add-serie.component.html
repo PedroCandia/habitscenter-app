@@ -1,9 +1,10 @@
 <div>
+  <ion-icon name="arrow-back-outline" (click)="goBack()"></ion-icon>
   <ion-list>
     <ion-item>
-      <ion-input label="No. de flexiones" type="number" labelPlacement="stacked" placeholder="0"></ion-input>
+      <ion-input label="Cantidad de flexiones" type="number" labelPlacement="stacked" placeholder="0" [(ngModel)]="flexiones"></ion-input>
     </ion-item>
 
-    <ion-button>Aceptar</ion-button>
+    <ion-button (click)="registerFlexiones()">Aceptar</ion-button>
   </ion-list>
 </div>
