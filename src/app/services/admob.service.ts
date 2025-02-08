@@ -30,26 +30,26 @@ export class AdmobService {
 
     AdMob.addListener(BannerAdPluginEvents.SizeChanged, (size: AdMobBannerSize) => {
       // Subscribe Change Banner Size
-      const appMargin = parseInt(String(size.height), 10);
-      console.log('AppMargin: ', appMargin);
-      
-      if (appMargin > 0) {
-        const app: any = document.querySelector('ion-app');
-        app.style.marginBottom = appMargin + 'px';
-      }
-    });
+        const appMargin = parseInt(String(size.height), 10);
+        // console.log('AppMargin: ', appMargin);
+        
+        if (appMargin > 0) {
+          const app: any = document.querySelector('ion-app');// ion-router-outlet app-tabs ion-tabs div ion-router-outlet app-home ion-content #adMob
+          app.style.marginBottom = appMargin + 'px';
+        }
+      });
 
     // if(!this.userId) {
     //   this.userId = this.authSvc.getUserID();
     // }
     const options: BannerAdOptions = {
       adId: environment.google.addMob.ad_banner_id,
-      adSize: BannerAdSize.BANNER,
+      adSize: BannerAdSize.ADAPTIVE_BANNER,
       position: BannerAdPosition.BOTTOM_CENTER,
       margin: 0,
       isTesting: environment.google.addMob.isTesting,
     };
-    AdMob.showBanner(options);
+    AdMob.showBanner(options);    
   }
 
   removeBanner() {

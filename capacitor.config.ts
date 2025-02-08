@@ -19,18 +19,17 @@ const config: CapacitorConfig = {
       launchFadeOutDuration: 3000,
       // backgroundColor: "#ffffffff",
       androidSplashResourceName: "splash",
-      // androidScaleType: "FIT_XY",
+      androidScaleType: "FIT_XY",
       showSpinner: false, 
-      // androidSpinnerStyle: "large",
-      // iosSpinnerStyle: "small",
-      // spinnerColor: "#999999",
+      androidSpinnerStyle: "large",
+      iosSpinnerStyle: "small",
+      spinnerColor: "#632B8D",
       splashFullScreen: true,
       splashImmersive: true,
       // layoutName: "launch_screen",
       // useDialog: true,
     },
   },
-  
 };
 
 export default config;

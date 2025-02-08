@@ -7,7 +7,7 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./add-serie.component.scss'],
 })
 export class AddSerieComponent  implements OnInit {
-  flexiones: number = 0;
+  flexiones: any;
   private modalController = inject(ModalController);
 
   constructor() { }
@@ -20,5 +20,11 @@ export class AddSerieComponent  implements OnInit {
 
   registerFlexiones() {
     this.modalController.dismiss({ flexiones: this.flexiones });
+  }
+
+  handleKeyPress(event: any) {
+    if (event.key === 'Enter') {
+      this.registerFlexiones();
+    }
   }
 }
