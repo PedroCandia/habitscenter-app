@@ -17,6 +17,11 @@
         <div style="display: flex; align-items: center; width: 100%;">
           <ion-input #writeMessageInput id="writeMessageInput" (keyup.enter)="sendMessage()" [(ngModel)]="newMessage" placeholder="Escribe un mensaje"></ion-input>
           <ion-icon style="font-size: 1.5rem; cursor: pointer; padding-left: 1rem;" name="send-outline" (click)="sendMessage()" id="sendMessageIcon"></ion-icon>
+          @if(isSessionActive) {
+            <ion-icon name="stop-circle-outline" style="font-size: 1.5rem; cursor: pointer; padding-left: 1rem;" (click)="stopSession()"></ion-icon>
+          } @else {
+            <ion-icon name="mic-outline" style="font-size: 1.5rem; cursor: pointer; padding-left: 1rem;" (click)="startSession()"></ion-icon>
+          }
         </div>
       </ion-col>
     </ion-row>

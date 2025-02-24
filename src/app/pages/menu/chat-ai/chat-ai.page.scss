@@ -4,22 +4,37 @@
 }
 
 .user-col {
-    background-color: #8A2BE2;
-    color: white;
+    border-left: 4px solid #632B8D; /* Línea morada para el usuario */
     padding: 0.5rem;
-    border-radius: 10px;
     margin-bottom: 1rem;
     margin-left: 1rem;
 }
 
 .assistant-col {
-    background-color: #87CEEB;
-    color: black;
+    border-left: 4px solid #000000; /* Línea celeste para el asistente */
     padding: 0.5rem;
-    border-radius: 10px;
     margin-bottom: 1rem;
     margin-right: 1rem;
 }
+
+
+// .user-col {
+//     background-color: #8A2BE2;
+//     color: white;
+//     padding: 0.5rem;
+//     border-radius: 10px;
+//     margin-bottom: 1rem;
+//     margin-left: 1rem;
+// }
+
+// .assistant-col {
+//     background-color: #87CEEB;
+//     color: black;
+//     padding: 0.5rem;
+//     border-radius: 10px;
+//     margin-bottom: 1rem;
+//     margin-right: 1rem;
+// }
 
 ion-title {
     text-align: center;

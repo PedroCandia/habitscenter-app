@@ -62,4 +62,52 @@ export class ChatgptService {
 
     return data || 'Network response wasnt ok';
   }
+
+  async getToken() {
+    let res, data;
+    const requestData = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    };
+    
+    try {
+      res = await fetch(this.apiUrl + '/gpt/realtime-token', requestData);
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      data = await res.json();
+    } catch (error) {
+      console.log(error);
+    }
+
+    return data || 'Network response wasnt ok';
+  }
+
+  async realtime(offer: any, EPHEMERAL_KEY:any) {
+    let res, data;
+    const requestData = {
+      method: 'POST',
+      body: JSON.stringify({
+        offer: offer,
+        EPHEMERAL_KEY: EPHEMERAL_KEY
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    };
+    
+    try {
+      res = await fetch(this.apiUrl + '/gpt/realtime-msg', requestData);
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      };
+      data = await res.text();
+    } catch (error) {
+      console.log(error);
+    }
+
+    return data || 'Network response wasnt ok';
+  }
 }
