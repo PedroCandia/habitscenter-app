@@ -1,15 +1,17 @@
-<div class="ion-padding">
-  <ion-icon name="arrow-back-outline" (click)="goBack()" style="font-size: 1.5rem;"></ion-icon>
-  <ion-list>
-    <ion-item>
-      <ion-input label="Cantidad de flexiones" type="number" labelPlacement="stacked" placeholder="0" [(ngModel)]="flexiones"></ion-input>
-    </ion-item>
+<ion-content class="ion-padding" fullscreen>
+  <ion-icon name="arrow-back-outline" (click)="goBack()" style="font-size: 1.5rem; position: absolute; top: 1rem; left: 1rem;"></ion-icon>
 
-    <ion-button (click)="registerFlexiones()" expand="block"
-    (keydown.enter)="registerFlexiones()"
-    (keyup.enter)="registerFlexiones()"
-    (ionKeypress)="handleKeyPress($event)">
+  <div class="center-container">
+    <ion-input
+      type="number"
+      placeholder="0"
+      [(ngModel)]="flexiones"
+      inputmode="numeric"
+      class="centered-input">
+    </ion-input>
+
+    <ion-button expand="block" class="custom-button" (click)="registerFlexiones()">
       Aceptar
     </ion-button>
-  </ion-list>
-</div>
+  </div>
+</ion-content>

@@ -89,6 +89,12 @@ export class ChatAiPage implements OnInit {
         const data = JSON.parse(e.data);
         // Agregamos el evento al inicio del array
         this.events = [data, ...this.events];
+
+        // if e.type === response.audio_transcript.delta
+        // then show in chat e.delta
+
+        // if e.type === response.audio_transcript.done
+        // then show in chat e.transcript
       } catch (error) {
         console.error("Error parseando mensaje:", error);
       }
