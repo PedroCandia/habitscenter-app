@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuxFnsService } from 'src/app/services/aux-fns.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { environment } from 'src/environments/environment';
-import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, IonModal, ModalController, NavController, ToastController } from '@ionic/angular';
 import { ChatAiComponent } from 'src/app/components/chat-ai/chat-ai.component';
 import { AdmobService } from 'src/app/services/admob.service';
 // import { GlassfyService } from 'src/app/services/glassfy.service';
@@ -29,6 +29,8 @@ export class HomePage {
   private toastCtllr = inject(ToastController);
   private alertCtllr = inject(AlertController);
   private navCtrl = inject(NavController);
+
+  @ViewChild('modal', { static: true }) modal!: IonModal;
 
   // Glassfy
   user: any = {
@@ -87,6 +89,20 @@ export class HomePage {
   todayFormatted: any;
   valueTodayFormatted: any;
 
+  // show first modal to new users
+  showModal:any = true;
+
+  // svg variables
+  maxPushUps = 0;
+  readonly radius = 70;
+  readonly circumference = 2 * Math.PI * this.radius;
+
+
+  get dashOffset(): number {
+    const percent = Math.min(this.flexiones / this.maxPushUps, 1);
+    return this.circumference * (1 - percent);
+  }
+
   constructor() {
     // this.glassfySvc.initGlassfy();
 
@@ -99,6 +115,10 @@ export class HomePage {
   }
 
   ngOnInit() {
+    this.isNewUser();
+
+    this.loadMaxPushUpsGoal();
+
     // this.checkNewDay();
     // this.loadHabits();
 
@@ -129,6 +149,30 @@ export class HomePage {
     //   }
     // });
   // }
+
+  isNewUser() {
+    this.showModal = localStorage.getItem('first_user_show_modal');
+    if(this.showModal == '' || this.showModal == null || this.showModal != 'false') {
+      console.log('showModal: true');
+
+      // ✅ Abre el modal con trigger desde TS
+      setTimeout(() => this.modal.present(), 0);
+      
+      this.showModal = 'false';
+      localStorage.setItem('first_user_show_modal', this.showModal);
+    }
+  }
+
+  loadMaxPushUpsGoal() {
+    const savedGoal = localStorage.getItem('max_pushups_goal');
+    if (savedGoal !== null) {
+      this.maxPushUps = parseInt(savedGoal, 10);
+      console.log('Meta cargada desde localStorage:', this.maxPushUps);
+    } else {
+      console.log('No hay meta guardada aún.');
+    }
+  }
+
 
   checkNewDay() {
     this.loadHabits();
@@ -386,5 +430,13 @@ export class HomePage {
       localStorage.setItem(this.todayFormatted, JSON.stringify([]));
       console.log('Nuevo día, flexiones reiniciadas.');
     }
+  }
+
+  saveMaxPushUps() {
+    // Guarda en cache/localStorage
+    localStorage.setItem('max_pushups_goal', String(this.maxPushUps));
+
+    // Cierra el modal
+    this.modal.dismiss();
   }
 }

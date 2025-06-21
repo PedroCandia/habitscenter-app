@@ -45,3 +45,79 @@ ion-item {
     padding-inline: 1rem; 
     cursor: pointer;
 }
+
+.circle-border {
+  fill: transparent;
+  stroke: var(--ion-color-medium);
+  stroke-width: 10px;
+}
+
+.circle-progress {
+  fill: transparent;
+  stroke: var(--ion-color-primary);
+  stroke-width: 10px;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.circle-main-text {
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: var(--ion-color-primary);
+}
+
+.circle-text {
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: black;
+}
+
+ion-modal {
+  --height: 60%;
+  --width: 90%;
+  --border-radius: 8px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+ion-modal::part(backdrop) {
+  background: rgba(209, 213, 219);
+  opacity: 1;
+}
+
+ion-modal ion-toolbar {
+  --background: rgb(14 116 144);
+  --color: white;
+}
+
+// first user max flexiones
+.center-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  padding: 2rem;
+}
+
+.centered-input {
+  margin: 6rem;
+  font-size: 3rem;
+  text-align: center;
+  width: 100%;
+  border-bottom: 1px solid var(--ion-color-medium);
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.custom-button {
+  width: 60%;
+  --border-radius: 8px;
+  --background: var(--ion-color-primary);
+}

@@ -18,17 +18,24 @@
     </div>
   </div>
 
-  <div style="text-align: center; padding-top: 3rem;">
-    <ion-text style="font-size: 1.5rem;">{{flexiones}} Flexiones</ion-text>
-  </div>
+  <div style="text-align: center; padding: 1rem;">
+    <svg width="170" height="170">
+      <!-- Backgroud circle -->
+      <circle r="70" cx="50%" cy="50%" class="circle-border"></circle>
 
-  <div style="position: relative; display: flex; justify-content: center; align-items: center; padding-top: 3rem; padding-bottom: 3rem;">
-    <img src="../../../../assets/img/home/flexion.png"
-      alt=""
-      style="position: relative; z-index: 2;">
-    <img src="../../../../assets/img/home/Ellipse 11.png"
-      alt=""
-      style="position: absolute; z-index: 1;">
+      <!-- Progress circle -->
+      <circle
+        r="70"
+        cx="50%"
+        cy="50%"
+        class="circle-progress"
+        [attr.stroke-dasharray]="circumference"
+        [attr.stroke-dashoffset]="dashOffset"
+      ></circle>
+      
+      <text x="50%" y="40%" class="circle-main-text">{{ flexiones | number }}</text>
+      <text x="50%" y="57%" class="circle-text">{{ maxPushUps | number }}</text>
+    </svg>
   </div>
 
   <!-- <div id="adMob" style="width: 100%; height: 50px; display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;"></div> -->
@@ -43,11 +50,16 @@
       </div>
     </div>
   } @else {
-    <div style="width: 100%; text-align: center; padding-bottom: 1rem;">
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end" style="padding-bottom: 4rem;">
+      <ion-fab-button (click)="openComponent()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <!-- <div style="width: 100%; text-align: center; padding-bottom: 1rem;">
       <ion-text (click)="openComponent()" style="display: flex; align-items: center; justify-content: center; font-size: 1rem; text-decoration: underline;">Agregar flexiones <ion-icon name="add-outline" style="color: #7C4DFF; font-size: 1rem;"></ion-icon></ion-text>
-    </div>
+    </div> -->
 
-    @for(card of valueTodayFormatted; track $index) {
+    @for(card of valueTodayFormatted.reverse(); track $index) {
       <div class="card" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;">
         <div class="card-content" style="background-color: #F3F6FB; width: 90%; border-radius: 24px; display: flex; justify-content: space-evenly; align-items: center;">
           <img src="../../../../assets/img/home/flexion-card.png" alt="">
@@ -56,6 +68,7 @@
       </div>
     }
   }
+
 <!-- 
   <ion-list lines="none">
     <div *ngFor="let habit of habits" style="display: flex; align-items: center; margin-bottom: 0.5rem;">
@@ -67,4 +80,26 @@
       </ion-item>
     </div>
   </ion-list> -->
+
+  <ion-modal #modal trigger="open-modal" backdrop-dismiss="false">
+    <ng-template>
+      <ion-content>
+        <div class="center-container">
+          <ion-text>Vamos a establecer tu meta de flexiones!</ion-text>
+
+          <ion-input
+            type="number"
+            placeholder="0"
+            [(ngModel)]="maxPushUps"
+            inputmode="numeric"
+            class="centered-input">
+          </ion-input>
+
+          <ion-button expand="block" class="custom-button" (click)="saveMaxPushUps()">
+            Aceptar
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

@@ -32,6 +32,7 @@ export class ChatAiPage implements OnInit {
     current: "",
   };;
   isSessionActive: boolean = false;
+  emitSession: boolean = false;
   events:any[] = [];
 
   // Para limpiar listeners si es necesario
@@ -305,6 +306,7 @@ export class ChatAiPage implements OnInit {
   async startSession() {
     // Get an ephemeral key from the Fastify server
     // const tokenResponse = await this.chatgptSvc.getToken();
+    this.emitSession = true;
     const data = await this.chatgptSvc.getToken();
     console.log('Realtime token response: ', data);
 
@@ -361,6 +363,7 @@ export class ChatAiPage implements OnInit {
     }
 
     this.isSessionActive = false;
+    this.emitSession = false;
     this.dataChannel = null;
     this.peerConnection.current = null;
   }
