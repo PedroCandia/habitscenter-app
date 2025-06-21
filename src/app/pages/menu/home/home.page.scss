@@ -20,7 +20,14 @@ ion-title {
 ion-text {
     font-size: 1.2rem;
     padding-left: 0.5rem;
-    color: var(--ion-color-always-dark);
+    color: var(--ion-color-dark);
+}
+
+.card-ion-text {
+  font-size: 0.9rem;
+  padding: 0;
+  font-weight: 600;
+  color: var(--ion-color-always-dark);
 }
 
 ion-list {
@@ -75,7 +82,7 @@ ion-item {
   font-size: 1.2rem;
   text-anchor: middle;
   dominant-baseline: central;
-  fill: black;
+  fill: var(--ion-color-dark);
 }
 
 ion-modal {
