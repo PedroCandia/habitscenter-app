@@ -116,15 +116,14 @@ export class HomePage {
 
   ngOnInit() {
     this.isNewUser();
-
     this.loadMaxPushUpsGoal();
 
-    // this.checkNewDay();
+    this.loadStreak();
+    // this.checkStreak(); Esta funcion se usara para actualizar, se pasa a -> updateStreak
+
     // this.loadHabits();
 
     this.loadFlexiones();
-
-    // this.loadStreak();
     this.bannerAdMob();
   }
     // if(environment.production) {
@@ -173,34 +172,63 @@ export class HomePage {
     }
   }
 
+  updateStreak() {
+    const today = new Date().toDateString(); // Fecha de hoy
+    const todayStreak = localStorage.getItem('todayStreak');
+    let streakIsValid = localStorage.getItem('streakIsValid') == "true" ? true : false;
+    streakIsValid = streakIsValid && (todayStreak !== today);
 
-  checkNewDay() {
-    this.loadHabits();
-    const today = new Date().toDateString(); // Fecha actual
-    const lastDate = localStorage.getItem('todayStreak'); // Última fecha guardada
-  
-    if (lastDate !== today) {
-      // Si es un nuevo día, restablecemos los hábitos y el todayStreak
-      this.resetHabits();
+    if (streakIsValid) {
+      this.streak++; // Incrementar la racha
+      this.saveStreak(today); // Guardar la nueva racha en localStorage
     }
   }
 
-  resetHabits() {
-    this.habits.forEach((habit: any) => {
-      habit.checked = false; // Restablecemos el "checked" de cada hábito a false
-    });
-    this.saveHabits(); // Guardamos los hábitos restablecidos en localStorage
+  saveStreak(today: string) {
+    // Guardar la racha en localStorage
+    localStorage.setItem('streak', this.streak.toString());
+    // Guardar que ya se incrementó la racha hoy
+    localStorage.setItem('todayStreak', today);
   }
 
-  loadHabits() {
-    const storedHabits = localStorage.getItem('habits');
-    if (storedHabits) {
-      this.habits = JSON.parse(storedHabits); // Cargamos los hábitos
-      console.log('Hábitos cargados: ', this.habits);
+  loadStreak() {
+    const storedStreak = localStorage.getItem('streak');
+    if (storedStreak) {
+      this.streak = parseInt(storedStreak, 10); // Cargar la racha
     } else {
-      this.habits = []; // Si no hay hábitos guardados, inicializamos como un array vacío
+      this.streak = 0; // Inicializar racha en 0 si no existe
     }
+
+    console.log("Peter Streak: ", this.streak);
   }
+
+  // checkNewDay() {
+  //   // this.loadHabits();
+  //   const today = new Date().toDateString(); // Fecha actual
+  //   const lastDate = localStorage.getItem('todayStreak'); // Última fecha guardada
+  
+  //   if (lastDate !== today) {
+  //     // Si es un nuevo día, restablecemos los hábitos y el todayStreak
+  //     this.resetHabits();
+  //   }
+  // }
+
+  // resetHabits() {
+  //   this.habits.forEach((habit: any) => {
+  //     habit.checked = false; // Restablecemos el "checked" de cada hábito a false
+  //   });
+  //   this.saveHabits(); // Guardamos los hábitos restablecidos en localStorage
+  // }
+
+  // loadHabits() {
+  //   const storedHabits = localStorage.getItem('habits');
+  //   if (storedHabits) {
+  //     this.habits = JSON.parse(storedHabits); // Cargamos los hábitos
+  //     console.log('Hábitos cargados: ', this.habits);
+  //   } else {
+  //     this.habits = []; // Si no hay hábitos guardados, inicializamos como un array vacío
+  //   }
+  // }
   
 
   async openComponent() {
@@ -225,7 +253,6 @@ export class HomePage {
   }
 
   saveFlexiones(flexiones:any) {
-    const date = new Date();
     // Crear un nuevo registro con el número de flexiones y la hora exacta
     const newEntry = {
       flexiones: Number(flexiones),
@@ -244,23 +271,27 @@ export class HomePage {
     localStorage.setItem(this.todayFormatted, JSON.stringify(this.valueTodayFormatted));
 
     console.log(`Flexiones registradas para ${this.todayFormatted}:`, this.valueTodayFormatted);
+
+    //Incrementamos la racha
+    localStorage.setItem('streakIsValid', "true");
+    this.updateStreak();
   }
 
-  async goToConfigHabitComponent() {
-    const modal = await this.modalController.create({
-      component: ConfigHabitComponent
-    });
+  // async goToConfigHabitComponent() {
+  //   const modal = await this.modalController.create({
+  //     component: ConfigHabitComponent
+  //   });
 
-    modal.onDidDismiss().then((event) => {
-      if (event.data && event.data?.loadHabits) {
-        if(event.data?.loadHabits) {
-          this.loadHabits();
-        }
-      }
-    });
+  //   modal.onDidDismiss().then((event) => {
+  //     if (event.data && event.data?.loadHabits) {
+  //       if(event.data?.loadHabits) {
+  //         this.loadHabits();
+  //       }
+  //     }
+  //   });
     
-    await modal.present();
-  }
+  //   await modal.present();
+  // }
 
   async bannerAdMob() {
     await this.adMobSvc.banner();
@@ -357,58 +388,30 @@ export class HomePage {
     await modal.present();
   }
 
-  toggleCheck(habit: any) {
-    // Si el hábito ya está marcado, no hacer nada
-    if (habit.checked) {
-      console.log('Habit is already checked, no action taken.');
-      this.loadHabits();
-      return; // Salir de la función si ya está marcado
-    }
+  // toggleCheck(habit: any) {
+  //   // Si el hábito ya está marcado, no hacer nada
+  //   if (habit.checked) {
+  //     console.log('Habit is already checked, no action taken.');
+  //     this.loadHabits();
+  //     return; // Salir de la función si ya está marcado
+  //   }
 
-    console.log('Habit checked: ', habit);
-    // Alterna el estado de "checked" del hábito
-    habit.checked = !habit.checked;
+  //   console.log('Habit checked: ', habit);
+  //   // Alterna el estado de "checked" del hábito
+  //   habit.checked = !habit.checked;
     
-    // Guardar los hábitos actualizados en el localStorage
-    this.saveHabits();
+  //   // Guardar los hábitos actualizados en el localStorage
+  //   this.saveHabits();
 
-    // Verificar si todos los hábitos están completados para incrementar la racha
-    this.checkStreak();
-  }
+  //   // Verificar si todos los hábitos están completados para incrementar la racha
+  //   this.checkStreak();
+  // }
 
-  saveHabits() {
-    // Convertimos la lista de hábitos a string y la guardamos en localStorage
-    localStorage.setItem('habits', JSON.stringify(this.habits));
-    this.loadHabits();
-  }
-
-  checkStreak() {
-    const today = new Date().toDateString(); // Fecha de hoy
-    const todayStreak = localStorage.getItem('todayStreak');
-    // Verificar si todos los hábitos están marcados como "checked"
-    const allChecked = this.habits.every((habit:any) => habit.checked);
-  
-    if (allChecked && todayStreak !== today) {
-      this.streak++; // Incrementar la racha
-      this.saveStreak(today); // Guardar la nueva racha en localStorage
-    }
-  }
-
-  saveStreak(today: string) {
-    // Guardar la racha en localStorage
-    localStorage.setItem('streak', this.streak.toString());
-    // Guardar que ya se incrementó la racha hoy
-    localStorage.setItem('todayStreak', today);
-  }
-
-  loadStreak() {
-    const storedStreak = localStorage.getItem('streak');
-    if (storedStreak) {
-      this.streak = parseInt(storedStreak, 10); // Cargar la racha
-    } else {
-      this.streak = 0; // Inicializar racha en 0 si no existe
-    }
-  }
+  // saveHabits() {
+  //   // Convertimos la lista de hábitos a string y la guardamos en localStorage
+  //   localStorage.setItem('habits', JSON.stringify(this.habits));
+  //   this.loadHabits();
+  // }
 
   loadFlexiones() {
     const storedFlexiones = localStorage.getItem('flexiones');
